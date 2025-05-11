@@ -1,56 +1,78 @@
 import { useEffect, useState } from "react";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { useAuth } from "../../hooks/useAuth";
 import ProjectCard from "../../components/ProjectCard";
-import { useNavigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 
 const Profile = () => {
   const { user } = useAuth();
   const [projects, setProjects] = useState([]);
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!user) return;
 
-    const fetchProjects = async () => {
-      const q = query(collection(db, "projects"), where("userId", "==", user.uid));
-      const querySnapshot = await getDocs(q);
-
-      const results = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-
-      setProjects(results);
-    };
-
-    fetchProjects();
-  }, [user]);
-
-  const handleNewProject = () => {
-    navigate("/profile/new");
+  const fetchProjects = async () => {
+      try {
+          const q = query(collection(db, "projects"), where("userId", "==", user.uid));
+          const querySnapshot = await getDocs(q);
+          const userProjects = querySnapshot.docs.map(doc => ({
+              id: doc.id,
+              ...doc.data()
+          }));
+          setProjects(userProjects);
+      } catch (error) {
+          console.error("Error al obtener proyectos:", error);
+      } finally {
+          setLoading(false);
+      }
   };
 
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Mis Proyectos</h1>
-      <button
-        onClick={handleNewProject}
-        className="mb-6 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-      >
-        Nuevo Proyecto
-      </button>
+  const handleDelete = async (id) => {
+      const confirm = window.confirm("¿Estás seguro de que deseas eliminar este proyecto?");
+      if (!confirm) return;
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {projects.length === 0 ? (
-          <p>No tienes proyectos aún.</p>
-        ) : (
-          projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))
-        )}
+      try {
+          await deleteDoc(doc(db, "projects", id));
+          setProjects(projects.filter(p => p.id !== id));
+      } catch (error) {
+          console.error("Error al eliminar proyecto:", error);
+      }
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchProjects();
+    }
+  }, [user]);
+
+  if (loading) return <p className="text-center mt-4">Cargando proyectos...</p>;
+
+  return (
+    <div className="max-w-3xl mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Mis Proyectos</h1>
+      <div className="mb-4">
+        <Link
+          to="/profile/new"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          + Nuevo Proyecto
+        </Link>
       </div>
+
+      {projects.length === 0 ? (
+        <p>No tienes proyectos aún.</p>
+      ) : (
+        <div className="grid gap-4">
+          {projects.map(project => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              onDelete={() => handleDelete(project.id)}
+              isOwner={true}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
