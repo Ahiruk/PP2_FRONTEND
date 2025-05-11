@@ -6,7 +6,7 @@ import Profile from "../src/pages/Profile/Profile"; // "Mi Perfil"
 //import EditProject from "./pages/EditProject";
 //import Explore from "./pages/Explore";
 //import ProjectDetail from "./pages/ProjectDetail";
-//import PrivateRoute from "./routes/PrivateRoute";
+import PrivateRoute from "../src/components/PrivateRoute"; // "Ruta Privada"
 
 function App() {
   return (
@@ -14,8 +14,8 @@ function App() {
       {/* Rutas públicas */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/explore" element={<Explore />} />
-      <Route path="/project/:id" element={<ProjectDetail />} />
+     {/*  <Route path="/explore" element={<Explore />} /> */}
+      {/* <Route path="/project/:id" element={<ProjectDetail />} /> */}
 
       {/* Rutas privadas */}
       <Route
@@ -26,22 +26,22 @@ function App() {
           </PrivateRoute>
         }
       />
-      <Route
+      {/* <Route
         path="/profile/new"
         element={
           <PrivateRoute>
             <NewProject />
           </PrivateRoute>
         }
-      />
-      <Route
+      /> */}
+      {/* <Route
         path="/profile/edit/:id"
         element={
           <PrivateRoute>
             <EditProject />
           </PrivateRoute>
         }
-      />
+      /> */}
     </Routes>
   );
 }
