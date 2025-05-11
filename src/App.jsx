@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Login from "../src/pages/Auth/Login"; // "Iniciar sesión"
 import Register from "../src/pages/Auth/Register"; // "Registro"
 import Profile from "../src/pages/Profile/Profile"; // "Mi Perfil"
-//import NewProject from "./pages/NewProject";
+import NewProject from "../src/pages/Profile/NewProject"; // "Nuevo Proyecto"
 //import EditProject from "./pages/EditProject";
 //import Explore from "./pages/Explore";
 //import ProjectDetail from "./pages/ProjectDetail";
@@ -26,14 +26,14 @@ function App() {
           </PrivateRoute>
         }
       />
-      {/* <Route
+      <Route
         path="/profile/new"
         element={
           <PrivateRoute>
             <NewProject />
           </PrivateRoute>
         }
-      /> */}
+      />
       {/* <Route
         path="/profile/edit/:id"
         element={
