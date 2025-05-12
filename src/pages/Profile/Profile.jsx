@@ -79,23 +79,33 @@ const Profile = () => {
     navigate("/login");
   };
 
-  if (loading) return <p className="loading">Cargando proyectos...</p>;
-
+   if (loading) {
+    return (
+      <div className="mi-loading-container">
+        <div className="loader"></div>
+        <p className="mi-loading-text">Cargando proyectos...</p>
+      </div>
+    );
+  }
   return (
     <div className="profile-container">
       <div className="profile-header">
         <h1>Tus Proyectos</h1>
         {user && (
           <p className="subtext">
-            Conectado como: <span>{user.email}</span>
+            📙 Bienvenid@  <span>{user.email}</span>
           </p>
         )}
+        
         <div className="separator" />
       </div>
 
-      <Link to="/profile/new" className="btn-new">
+      <button
+        className="btn-new"
+        onClick={() => navigate("/profile/new")}
+      >
         + Nuevo Proyecto
-      </Link>
+      </button>
 
       {projects.length === 0 ? (
         <p className="no-projects">No tienes proyectos aún.</p>
@@ -120,29 +130,29 @@ const Profile = () => {
       )}
 
       {editingProject && (
-  <>
-    <div className="modal-backdrop" />
-    <div className="edit-form">
-      <h3>Editar Proyecto</h3>
-      <label>Título:</label>
-      <input
-        value={editedTitle}
-        onChange={e => setEditedTitle(e.target.value)}
-      />
-      <label>Descripción:</label>
-      <textarea
-        value={editedDescription}
-        onChange={e => setEditedDescription(e.target.value)}
-      />
-      <button onClick={handleSave} className="btn-save">
-        Guardar Cambios
-      </button>
-      <button onClick={() => setEditingProject(null)} className="btn-cancel">
-        Cancelar
-      </button>
-    </div>
-  </>
-)}
+        <>
+          <div className="modal-backdrop" />
+          <div className="edit-form">
+            <h3>Editar Proyecto</h3>
+            <label>Título:</label>
+            <input
+              value={editedTitle}
+              onChange={e => setEditedTitle(e.target.value)}
+            />
+            <label>Descripción:</label>
+            <textarea
+              value={editedDescription}
+              onChange={e => setEditedDescription(e.target.value)}
+            />
+            <button onClick={handleSave} className="btn-save">
+              Guardar Cambios
+            </button>
+            <button onClick={() => setEditingProject(null)} className="btn-cancel">
+              Cancelar
+            </button>
+          </div>
+        </>
+      )}
 
 
       <button onClick={handleLogout} className="btn-new">

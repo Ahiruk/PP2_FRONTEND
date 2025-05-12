@@ -18,6 +18,7 @@ const TodosLosProyectos = () => {
           id: doc.id,
           ...doc.data(),
         }));
+        
         setProjects(results);
       } catch (error) {
         console.error("❌ Error al obtener todos los proyectos:", error);
@@ -29,9 +30,19 @@ const TodosLosProyectos = () => {
     fetchAllProjects();
   }, []);
 
+  // if (loading) {
+  //   return <p className="loading">Cargando todos los proyectos...</p>;
+  // }
   if (loading) {
-    return <p className="loading">Cargando todos los proyectos...</p>;
-  }
+  return (
+    <div className="loading-container">
+      <div className="loader"></div>
+      <p className="loading-text">Cargando todos los proyectos...</p>
+    </div>
+  );
+}
+
+
 
   return (
     <div className="todos-container">

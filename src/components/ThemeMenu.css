@@ -1,0 +1,141 @@
+
+/*
+  .theme-switch:
+  - Posicionar toggler en esquina superior izquierda pero un poco más a la derecha.
+*/
+.theme-switch {
+  position: fixed;
+  top: 1rem;    /* espacio desde el tope */
+  left: 3rem;   /* aumentado espacio desde la izquierda */
+  display: block;
+  height: auto;
+}
+
+/*
+  .toggle-checkbox:
+  - Checkbox oculto para control del toggle.
+*/
+.toggle-checkbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/*
+  .toggle-slot:
+  - Marco exterior, reducido para un aspecto 'cute'.
+*/
+.toggle-slot {
+  position: relative;
+  height: 2.5rem;    /* Altura reducida */
+  width: 5.5rem;       /* Ancho reducido */
+  border: 2px solid #e4e7ec;
+  border-radius: 3rem;
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: background-color 250ms;
+}
+
+/*
+  Fondo en modo oscuro
+*/
+.toggle-checkbox:checked ~ .toggle-slot {
+  background-color: #374151;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3), inset 0 0 10px rgba(0,0,0,0.2);
+
+}
+
+/*
+  .toggle-button:
+  - Botón pequeño y centrado dentro del slot.
+*/
+.toggle-button {
+  position: absolute;
+  top: 0.25rem;   /* centrar verticalmente */
+  left: 0.25rem;  /* posición inicial */
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+  background-color: #ffeccf;
+  box-shadow: inset 0 0 0 0.25rem #ffbb52;
+  transition: transform 300ms ease, background-color 250ms;
+}
+
+/*
+  Mover el botón en modo oscuro
+*/
+.toggle-checkbox:checked ~ .toggle-slot .toggle-button {
+  transform: translateX(3rem);
+  background-color: #485367;
+  box-shadow: inset 0 0 0 0.25rem #ffffff;
+}
+
+/*
+  Wrappers de iconos, tamaño reducido
+*/
+.sun-icon-wrapper{
+  position: absolute;
+  top: 0.5rem;
+  height: 18rem;
+  transition: opacity 150ms, transform 300ms ease;
+}
+
+.moon-icon-wrapper {
+  position: absolute;
+  top: 0.5rem;
+  height: 20rem;
+  transition: opacity 150ms, transform 300ms ease;
+}
+
+/* Color del ícono de sol */
+.sun-icon { color: #ffbb52; 
+font-size: 1.7rem;}
+
+/* Posición sol en modo claro */
+.sun-icon-wrapper {
+  position: absolute;    
+  top: 0.2rem;
+  left: 1.2rem;
+  opacity: 1;
+  transform: rotate(15deg);
+}
+
+/* Oculta sol en modo oscuro */
+.toggle-checkbox:checked ~ .toggle-slot .sun-icon-wrapper {
+  opacity: 0;
+  transform: translateX(0.5rem) rotate(0);
+}
+
+/* Color del ícono de luna */
+.moon-icon { color: #ffffff; 
+font-size: 1.7rem;}
+
+/* Posición luna oculta */
+.moon-icon-wrapper {
+  top: 0.1rem;
+  right: 0.2rem;
+  opacity: 0;
+  transform: rotate(0);
+}
+
+/* Muestra luna en oscuro */
+.toggle-checkbox:checked ~ .toggle-slot .moon-icon-wrapper {
+  opacity: 1;
+  transform: translateX(-0.5rem) rotate(-15deg);
+}
+
+/*
+  Estilos de body: claro/oscuro
+*/
+body {
+  transition: background-color 250ms, color 250ms;
+  background-color: #ffffff;
+  color: #1a202c;
+}
+
+body.dark {
+  background-color: #1a202c;
+  color: #edf2f7;
+}

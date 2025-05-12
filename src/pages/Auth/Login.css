@@ -1,115 +1,197 @@
-/* Estilos base del body para evitar márgenes y forzar altura completa */
 html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
+    margin: 0;              /* Elimina márgenes predeterminados */
+    padding: 0;             /* Elimina relleno predeterminado */
+    height: 100%;           /* Fuerza altura completa para centrar verticalmente */
 }
 
 /* Centrado completo del contenedor del login */
 .login-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: var(--background-color);
+    display: flex;                  /* Utiliza flexbox */
+    align-items: center;            /* Centra verticalmente */
+    justify-content: center;        /* Centra horizontalmente */
+    height: 100vh;                  /* Ocupa toda la altura de la ventana */
+    background-color: var(--background-color); /* Color de fondo definido en variables CSS */
 }
 
-/* Formulario */
+/* Formulario de login */
 .login-form {
-    width: 100%;
-    max-width: 450px;
-    background-color: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;                    /* Ancho completo del contenedor padre */
+    max-width: 450px;               /* Máximo ancho para pantallas grandes */
+    background-color: white;        /* Fondo claro en modo claro */
+    padding: 30px;                  /* Espacio interno */
+    border-radius: 15px;            /* Esquinas redondeadas */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
 }
 
+/* Encabezado del form: título + error */
+.form-header {
+  margin-bottom: 40px;
+}
+
+/* Cuerpo del form: campos agrupados */
+.form-body {
+  margin-bottom: 20px;
+}
+
+/* Cada grupo de label + input */
+.form-group {
+  margin-bottom: 16px;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  color:#176B87;
+  padding-left: 38px;
+  font-weight: bold;
+}
+
+/* Grupo de botones: pone uno bajo el otro */
+.button-group {
+  display: flex;
+  flex-direction: column; /* apila verticalmente */
+  gap: 12px;              /* separación entre botones */
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Botón primario (login) */
+.btn-primary {
+  width: 85%;
+  padding: 8px;
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.btn-primary:hover {
+  background-color: var(--secondary-color);
+}
+
+/* Botón secundario (ver proyectos) */
+.btn-secondary {
+   width: 85%;
+  padding: 8px;
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.btn-secondary:hover {
+   background-color: var(--secondary-color);
+}
+
+/* Pie de formulario: link de registro */
+.form-footer {
+  text-align: center;
+}
+.link-register {
+  color: var(--primary-color);
+  font-weight: 500;
+}
+.link-register:hover {
+  text-decoration: underline;
+}
+
+/* Formulario en modo oscuro */
 body.dark .login-form {
-    background-color: #2a2a3b;
+    background-color: #393946;      /* Fondo oscuro para modo dark */
 }
 
+/* Título del formulario */
 .login-title {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 1.5rem;
-    color: var(--primary-color);
+    text-align: center;             /* Centra el texto */
+    margin-bottom: 40px;            /* Espacio inferior */
+    font-size: 2rem;              /* Tamaño de fuente */
+    color: var(--primary-color);    /* Color primario definido en variables */
 }
 
-/* Input */
+/* Campos de entrada (inputs) */
 .input-field {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 1rem;
-    background-color: white;
-    border: 1px solid #ccc;
-    color: var(--text-color);
+    width: 100%;                    /* Ocupa todo el ancho disponible */
+    padding: 12px;                  /* Relleno interno */
+    border-radius: 8px;             /* Borde redondeado */
+    font-size: 1rem;                /* Tamaño de fuente */
+    background-color: white;        /* Fondo claro */
+    border: 1px solid #ccc;         /* Borde gris claro */
+    color: var(--text-color);       /* Color del texto definido en variables */
 }
 
+/* Inputs en modo oscuro */
 body.dark .input-field {
-    background-color: #2e2e42;
-    border: 1px solid #444;
-    color: var(--text-color);
+    background-color: #2e2e42;      /* Fondo oscuro */
+    border: 1px solid #444;         /* Borde más oscuro */
+    color: var(--text-color);       /* Color de texto mantenido */
 }
 
 /* Botón de enviar */
 .submit-btn {
-    width: 90%;
-    padding: 12px;
-    margin-top: 10px;
-    background-color: var(--primary-color);
-    color: white;
-    font-weight: bold;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    width: 90%;                     /* Ancho del 90% del contenedor */
+    padding: 12px;                  /* Relleno interno */
+    margin-top: 10px;               /* Espacio superior */
+    background-color: var(--primary-color); /* Fondo con color primario */
+    color: white;                   /* Texto blanco */
+    font-weight: bold;              /* Texto en negrita */
+    border-radius: 8px;             /* Esquinas redondeadas */
+    border: none;                   /* Sin borde */
+    cursor: pointer;                /* Cursor puntero */
+    transition: background-color 0.3s ease; /* Transición suave al cambiar color */
+    display: block;                 /* Bloque para centrar con margin auto */
+    margin-left: auto;              /* Centra horizontalmente */
+    margin-right: auto;             /* Centra horizontalmente */
 }
 
+
+/* Hover del botón de enviar */
 .submit-btn:hover {
-    background-color: var(--secondary-color);
+    background-color: var(--secondary-color); /* Fondo con color secundario al pasar el cursor */
 }
 
 /* Botón de volver */
 .return-btn {
-    background: none;
-    color: var(--primary-color);
-    font-weight: 500;
-    font-size: 1rem;
-    padding: 0;
-    margin: 20px auto 0;
-    border: none;
-    cursor: pointer;
-    transition: color 0.3s ease;
-    display: block;
-    text-align: center;
+    background: none;               /* Sin fondo */
+    color: var(--primary-color);    /* Color primario para texto */
+    font-weight: 500;               /* Peso de fuente medio */
+    font-size: 1rem;                /* Tamaño de fuente */
+    padding: 0;                     /* Sin padding */
+    margin: 20px auto 0;            /* Espacio superior y centrado */
+    border: none;                   /* Sin borde */
+    cursor: pointer;                /* Cursor puntero */
+    transition: color 0.3s ease;    /* Transición suave del color */
+    display: block;                 /* Bloque para centrar */
+    text-align: center;             /* Centra el texto */
 }
 
+/* Hover del botón de volver */
 .return-btn:hover {
-    color: var(--secondary-color);
-    text-decoration: underline;
+    color: var(--secondary-color);  /* Color secundario al pasar el cursor */
+    text-decoration: underline;     /* Subrayado */
 }
 
-/* Errores */
+/* Mensaje de error */
 .error-message {
-    color: var(--error-color);
-    font-size: 0.875rem;
-    margin-bottom: 10px;
-    text-align: center;
+    color: var(--error-color);      /* Color de error definido en variables */
+    font-size: 0.875rem;            /* Tamaño de fuente ligero */
+    margin-bottom: 10px;            /* Espacio inferior */
+    text-align: center;             /* Centra el texto */
 }
 
-/* Responsive */
+/* Ajustes responsivos para tablets */
 @media (max-width: 768px) {
     .login-form {
-        padding: 20px;
+        padding: 20px;             /* Reduce padding en pantallas medianas */
     }
 }
 
+/* Ajustes responsivos para móviles */
 @media (max-width: 480px) {
     .login-title {
-        font-size: 1.25rem;
+        font-size: 1.25rem;        /* Reduce tamaño del título en móviles */
     }
 }

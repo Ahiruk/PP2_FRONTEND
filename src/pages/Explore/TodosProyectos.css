@@ -13,14 +13,23 @@
     margin-bottom: 2rem;
     padding-bottom: 0.5rem;
     border-bottom: 2px solid var(--accent-color);
+    gap:1rem;
+    margin-top: 3rem;
 }
 
 .todos-header h1 {
-    font-size: 2.5rem;
-    color: var(--primary-color);
-    font-family: 'Cal Sans', sans-serif;
-    margin: 0;
+  font-family: 'Cal Sans', sans-serif;
+  color: var(--primary-color);
+  margin: 0;
+
+  /* clamp(MÍN; FLUIDO; MÁX) para escalar entre móvil y desktop */
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+
+  /* opcional: si quieres separar del botón, en lugar de un padding fijo */
+  flex: 1;               /* ocupa todo el espacio disponible */
+  text-align: center;      /* o center / right según prefieras */
 }
+
 
 .todos-header button {
     background: var(--primary-color);
@@ -28,6 +37,7 @@
     padding: 0.6rem 1.2rem;
     border-radius: 0.5rem;
     transition: background 0.2s;
+    
 }
 
 .todos-header button:hover {
@@ -106,12 +116,46 @@
     color: var(--primary-color);
     text-decoration: underline;
 }
+/* Contenedor centrado para el loading */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 6rem); /* ajusta al alto de tu header */
+  text-align: center;
+  gap: 1rem;
+  color: var(--text-color);
+  font-size: 1.1rem;
+  margin: 0;
+}
 
-/* Loading / Empty State */
-.loading,
-.no-projects {
-    text-align: center;
-    font-size: 1.1rem;
-    color: var(--text-color);
-    margin-top: 2rem;
+/* Aquí va la animación radial en lugar del spinner por defecto */
+.loading::before {
+  content: "";
+  /* Tamaño del círculo */
+  width: 60px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+
+  /* Tres capas de gradiente que se desplazan */
+  background:
+    radial-gradient(154% 68.5% at top   , transparent 79.5%, #269af2 80%),
+    radial-gradient(154% 68.5% at bottom, #269af2 79.5%, transparent 80%),
+    radial-gradient(154% 68.5% at top   , transparent 79.5%, #269af2 80%),
+    #ccc;
+
+  /* Control de la repetición y tamaño */
+  background-size: 50.5% 220%;
+  background-position: -100% 0%, 0% 0%, 100% 0%;
+  background-repeat: no-repeat;
+
+  animation: l9 3s infinite linear;
+}
+
+/* Keyframes de tu animación radial */
+@keyframes l9 {
+  33%  { background-position:   0% 33%, 100% 33%, 200% 33%; }
+  66%  { background-position: -100% 66%,   0% 66%, 100% 66%; }
+  100% { background-position:   0% 100%, 100% 100%, 200% 100%; }
 }

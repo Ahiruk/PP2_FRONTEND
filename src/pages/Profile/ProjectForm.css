@@ -1,90 +1,155 @@
+/* ----------------------------------------------------
+   Contenedor general del formulario
+   - Fondo y padding: cambia --background-color para otro tono
+   ---------------------------------------------------- */
 .project-form {
-    background: var(--background-color);
-    padding: 2rem;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    max-width: 600px;
-    margin: 0 auto;
+  background: var(--background-color);
+  padding: 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 8px rgb(0, 0, 0);
+  max-width: 600px;
+  margin: 0 auto;
+  text-indent: 0px;
 }
 
-/* Grupos de campo */
+/* ----------------------------------------------------
+   Cada grupo de campo
+   - Margin-bottom: controla separación vertical
+   ---------------------------------------------------- */
 .project-form .form-group {
-    margin-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  margin-left: -20px; 
+  text-align: 200px; 
+  padding-left: 38px;
+  padding-right: 38px;
 }
 
-/* Etiquetas */
+/* ----------------------------------------------------
+   Etiquetas <label>
+   - Color: usa --primary-color; cambia a otra variable si quieres
+   ---------------------------------------------------- */
 .project-form label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--primary-color);
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+  padding-left: 0px;
 }
 
-/* Inputs y textarea */
+/* ----------------------------------------------------
+   Inputs y Textarea
+   - Background y color toman variables actuales
+   - Border cambia a --primary-color en focus
+   ---------------------------------------------------- */
 .project-form input[type="text"],
 .project-form textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ccc;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    transition: border-color 0.2s;
-    background: #fff;
-    color: var(--text-color);
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;               /* Cambia #ccc si quieres usar una variable */
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  background: #fff;                      /* En oscuro, override más abajo */
+  color: var(--text-color);
 }
 
 .project-form input:focus,
 .project-form textarea:focus {
-    outline: none;
-    border-color: var(--primary-color);
+  outline: none;
+  border-color: var(--primary-color);
 }
 
-/* Mensaje de error */
+/* ----------------------------------------------------
+   Mensaje de error validación
+   - Color: utiliza --error-color
+   ---------------------------------------------------- */
 .project-form .error-text {
-    color: var(--error-color);
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
+  color: var(--error-color);
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
 }
 
-/* Contenedor de botones */
+/* ----------------------------------------------------
+   Contenedor de botones
+   - Flex: ajusta distribución y separación
+   ---------------------------------------------------- */
 .project-form .form-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;  /* Botones a cada extremo */
+  align-items: center;
+  gap: 1rem;                        /* Separación mínima */
 }
 
-/* Botones comunes */
+/* ----------------------------------------------------
+   Botones comunes
+   - Padding, border-radius y transición
+   ---------------------------------------------------- */
 .project-form .btn {
-    padding: 0.6rem 1.2rem;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    transition: background 0.2s;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
-/* Botón de submit */
+/* ----------------------------------------------------
+   Botón primario (Guardar)
+   - Fondo y color: usa variables --primary-color
+   ---------------------------------------------------- */
 .project-form .btn-primary {
-    background: var(--primary-color);
-    color: #fff;
+  background: var(--primary-color);
+  color: #ffffff;
+  font-weight: bold; 
 }
 
+
+/* Hover primario (no aplicar si está disabled) */
 .project-form .btn-primary:hover:not(:disabled) {
-    background: var(--secondary-color);
+  background: var(--secondary-color);
 }
 
-/* Botón secundario */
+/* ----------------------------------------------------
+   Botón secundario (Volver)
+   - Fondo neutro y color de texto actual
+   ---------------------------------------------------- */
 .project-form .btn-secondary {
-    background: #ddd;
-    color: var(--text-color);
+  background: var(--primary-color);                  /* Cambia por var(--accent-color) si prefieres */
+  color: #ffffff;
+  font-weight: bold; 
 }
 
+/* Hover secundario */
 .project-form .btn-secondary:hover {
-    background: #ccc;
+  background: var(--secondary-color);
 }
 
-/* Estado disabled */
+/* ----------------------------------------------------
+   Estado disabled para cualquier botón
+   - Opacidad reducida y puntero “no permitido”
+   ---------------------------------------------------- */
 .project-form .btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ----------------------------------------------------
+   Modo Oscuro
+   - Ajusta inputs y fondo para .project-form
+   ---------------------------------------------------- */
+body.dark .project-form {
+  background: #2a2a3b;               /* cambia si quieres otro gris */
+}
+
+body.dark .project-form input,
+body.dark .project-form textarea {
+  background: #2e2e42;
+  border: 1px solid #444;
+  color: var(--text-color);
+}
+
+/* Modo Oscuro: texto de botones primario y secundario */
+body.dark .project-form .btn-primary,
+body.dark .project-form .btn-secondary {
+  color: #374151;               /* o var(--text-color) según prefieras */
 }

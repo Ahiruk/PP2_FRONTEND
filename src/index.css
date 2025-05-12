@@ -1,7 +1,7 @@
 /* 🎨 Tema Claro por defecto */
 :root {
   --primary-color: #176B87;     /* Azul oscuro */
-  --secondary-color: #86B6F6;   /* Azul claro */
+  --secondary-color: #b6d2f7;   /* Azul claro */
   --accent-color: #B4D4FF;      /* Azul suave */
   --background-color: #EEF5FF;  /* Fondo claro */
   --text-color: #333333;        /* Texto oscuro */
@@ -10,13 +10,31 @@
 
 /* 🌙 Tema Oscuro */
 body.dark {
-  --primary-color: #3B82F6;     /* Azul más vibrante (tipo Tailwind blue-500) */
-  --secondary-color: #60A5FA;   /* Azul más claro, pero aún saturado */
-  --accent-color: #1E40AF;      /* Azul oscuro para contraste (tipo blue-900) */
+  --primary-color: #fefefe;     /* Azul más vibrante (tipo Tailwind blue-500) */
+  --secondary-color: #68686e;   /* Azul más claro, pero aún saturado */
+  --accent-color: #2e2e42;      /* Azul oscuro para contraste (tipo blue-900) */
   --background-color: #1E1E2F;
-  --text-color: #f1f1f1;
+  --text-color: #ffffff;
   --error-color: #FF6B6B;
 }
+
+body.dark .form-group label{
+  color: var(--text-color);
+}
+
+/* 🌙 Modo Oscuro: solo cambia el color del texto de los botones */
+body.dark button {
+  color: var(--accent-color);    /* aquí usas tu variable definida en body.dark */
+}
+
+/* Asegura que en hover también mantenga ese color */
+body.dark button:hover {
+  color: var(--text-color);
+}
+
+
+
+
 
 /* ✅ Tipografías globales */
 body {

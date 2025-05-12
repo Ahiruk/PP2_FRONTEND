@@ -32,8 +32,26 @@ const MasInformacion = () => {
 
   const goBack = () => navigate("/todoslosproyectos");
 
-  if (loading) return <p className="mi-loading">Cargando proyecto...</p>;
-  if (!project) return <p className="mi-error">Proyecto no encontrado.</p>;
+  // if (loading) return <p className="mi-loading">Cargando proyecto...</p>;
+  
+  // if (!project) return <p className="mi-error">Proyecto no encontrado.</p>;
+ if (loading) {
+    return (
+      <div className="mi-loading-container">
+        <div className="loader"></div>
+        <p className="mi-loading-text">Cargando proyecto...</p>
+      </div>
+    );
+  }
+  if (!project) {
+    return (
+      <div className="mi-loading-container">
+        <p className="mi-error">Proyecto no encontrado.</p>
+      </div>
+    );
+  }
+
+
 
   return (
     <div className="mi-container">

@@ -41,63 +41,59 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <form
-        onSubmit={handleLogin}
-        className="login-form"
-      >
-        <h2 className="login-title">
-          Iniciar Sesión
-        </h2>
-
-        {error && (
-          <p className="error-message">{error}</p>
-        )}
-
-        <div className="mb-4">
-          <label className="block mb-1 text-sm text-gray-700 dark:text-gray-300">
-            Correo electrónico
-          </label>
-          <input
-            type="email"
-            className="input-field"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="ejemplo@correo.com"
-          />
+      <div className="login-container">
+      <form onSubmit={handleLogin} className="login-form">
+        <div className="form-header">
+          <h2 className="login-title">Iniciar Sesión</h2>
+          {error && <p className="error-message">{error}</p>}
         </div>
 
-        <div className="mb-6">
-          <label className="block mb-1 text-sm text-gray-700 dark:text-gray-300">
-            Contraseña
-          </label>
-          <input
-            type="password"
-            className="input-field"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
-          />
+        <div className="form-body">
+          <div className="form-group">
+            <label htmlFor="email">Correo electrónico</label>
+            <input
+              id="email"
+              type="email"
+              className="input-field"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="ejemplo@correo.com"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Contraseña</label>
+            <input
+              id="password"
+              type="password"
+              className="input-field"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+            />
+          </div>
         </div>
 
-        <button type="submit" className="submit-btn">
-          Iniciar sesión
-        </button>
+        <div className="button-group">
+          <button type="submit" className="btn-primary">
+            Iniciar sesión
+          </button>
+          <button
+            type="button"
+            onClick={goToTodosLosProyectos}
+            className="btn-secondary"
+          >
+            Ver todos los proyectos
+          </button>
+        </div>
 
-        <button
-          type="button"
-          onClick={goToTodosLosProyectos}
-          className="return-btn"
-        >
-          Ver todos los proyectos
-        </button>
-
-        <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-300">
-          ¿No tienes una cuenta?{" "}
-          <Link to="/register" className="text-blue-600 hover:underline">
-            Crear una cuenta
-          </Link>
-        </p>
+        <div className="form-footer">
+          <p>
+            ¿No tienes una cuenta?{" "}
+            <Link to="/register" className="link-register">
+              Crear una cuenta
+            </Link>
+          </p>
+        </div>
       </form>
     </div>
   );
