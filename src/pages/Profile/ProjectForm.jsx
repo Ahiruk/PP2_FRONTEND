@@ -3,6 +3,8 @@ import { db } from '../../services/firebase'; // Asegúrate de tener la config a
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import "./ProjectForm.css";
+
 
 const ProjectForm = () => {
   const [title, setTitle] = useState('');
@@ -43,46 +45,48 @@ const ProjectForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {error && <p className="text-red-500">{error}</p>}
-      <div>
-        <label className="block font-semibold">Título</label>
-        <input
-          type="text"
-          className="w-full border p-2 rounded"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label className="block font-semibold">Descripción breve</label>
-        <textarea
-          className="w-full border p-2 rounded"
-          rows="4"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        />
-      </div>
-      <div className="flex justify-between">
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          {loading ? 'Guardando...' : 'Guardar Proyecto'}
-        </button>
+    <form onSubmit={handleSubmit} className="project-form">
+  {error && <p className="error-text">{error}</p>}
 
-        <button
-          type="button"
-          onClick={handleBackToProfile}
-          className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
-        >
-          Volver a mis proyectos
-        </button>
-      </div>
-    </form>
+  <div className="form-group">
+    <label>Título</label>
+    <input
+      type="text"
+      value={title}
+      onChange={e => setTitle(e.target.value)}
+      required
+    />
+  </div>
+
+  <div className="form-group">
+    <label>Descripción breve</label>
+    <textarea
+      rows="4"
+      value={description}
+      onChange={e => setDescription(e.target.value)}
+      required
+    />
+  </div>
+
+  <div className="form-actions">
+    <button
+      type="submit"
+      className="btn btn-primary"
+      disabled={loading}
+    >
+      {loading ? "Guardando..." : "Guardar Proyecto"}
+    </button>
+
+    <button
+      type="button"
+      onClick={handleBackToProfile}
+      className="btn btn-secondary"
+    >
+      Volver a mis proyectos
+    </button>
+  </div>
+</form>
+
   );
 };
 

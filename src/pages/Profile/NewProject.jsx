@@ -1,4 +1,5 @@
 import ProjectForm from './ProjectForm';
+import "./NewProject.css";
 
 const NewProject = () => {
   return (
