@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../services/firebase";
-import { useNavigate, Link } from "react-router-dom"; // 👈 Importar Link
-
+import { useNavigate, Link } from "react-router-dom";
+import "./Login.css";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -54,7 +54,7 @@ const Login = () => {
         )}
 
         <div  className = "input-field">
-          <label label className = "input-label ">
+          <label className = "input-label ">
             Correo electrónico
           </label>
           <input
