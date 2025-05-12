@@ -1,10 +1,11 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // 👈 importar useNavigate
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { useEffect, useState } from "react";
 
 const MasInformacion = () => {
   const { id } = useParams();
+  const navigate = useNavigate(); // 👈 inicializar useNavigate
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -29,6 +30,10 @@ const MasInformacion = () => {
     fetchProject();
   }, [id]);
 
+  const goBack = () => {
+    navigate("/todoslosproyectos");
+  };
+
   if (loading) return <p className="text-center mt-4">Cargando proyecto...</p>;
   if (!project) return <p className="text-center mt-4 text-red-600">Proyecto no encontrado.</p>;
 
@@ -41,6 +46,13 @@ const MasInformacion = () => {
         <p><strong>Autor:</strong> {project.authorName || "Anónimo"}</p>
         <p><strong>Fecha de creación:</strong> {project.createdAt?.toDate?.().toLocaleString?.() || "No disponible"}</p>
       </div>
+
+      <button
+        onClick={goBack}
+        className="mt-6 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+      >
+        Volver a Todos los Proyectos
+      </button>
     </div>
   );
 };

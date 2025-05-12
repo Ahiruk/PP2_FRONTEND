@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../services/firebase";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // 👈 importar useNavigate
 
 const TodosLosProyectos = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate(); // 👈 hook para navegación
 
   const fetchAllProjects = async () => {
     try {
@@ -27,11 +28,23 @@ const TodosLosProyectos = () => {
     fetchAllProjects();
   }, []);
 
+  const goToLogin = () => {
+    navigate("/login");
+  };
+
   if (loading) return <p className="text-center mt-4">Cargando todos los proyectos...</p>;
 
   return (
     <div className="max-w-5xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Todos los Proyectos</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Todos los Proyectos</h1>
+        <button
+          onClick={goToLogin}
+          className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+        >
+          Volver al login
+        </button>
+      </div>
 
       {projects.length === 0 ? (
         <p className="text-gray-600">No hay proyectos disponibles.</p>
