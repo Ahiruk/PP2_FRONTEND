@@ -1,3 +1,4 @@
+/* Estilos para la vista de registro */
 .register-container {
     display: flex;
     align-items: center;
@@ -7,26 +8,111 @@
     background-color: var(--background-color);
 }
 
+/* El formulario de registro */
+.register-form {
+    width: 100%;
+    max-width: 450px;
+    /* Asegura que el formulario no se expanda demasiado */
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
 
+body.dark .register-form {
+    background-color: #2a2a3b;
+}
+
+/* Título del formulario */
 .register-title {
     text-align: center;
     margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: var(--primary-color);
 }
 
-.return-btn {
-    width: 100%;
-    background-color: #e0e0e0;
+/* Estilo para los campos de entrada */
+/* Estilo para los campos de entrada */
+.input-field {
+    width: 100%;              /* Que ocupe todo el ancho del contenedor */
+    padding: 12px;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: white;
+    border: 1px solid #ccc;
     color: var(--text-color);
-    font-weight: 500;
+    transition: border-color 0.2s ease;
+    display: block;           /* Para que respete el margin auto */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+body.dark .input-field {
+    background-color: #2e2e42;
+    border: 1px solid #444;
+    color: var(--text-color);
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* Estilo para el botón de enviar (Registrarse) */
+.submit-btn {
+    width: 90%;
     padding: 12px;
     margin-top: 10px;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: bold;
     border-radius: 8px;
     border: none;
-    font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
+.submit-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Estilo para el enlace de "¿Ya tienes cuenta?" */
+.return-btn {
+    background: none;
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 0;
+    margin-top: 10px;
+    margin: 20px auto 0;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
 .return-btn:hover {
-    background-color: #c2c2c2;
+    color: var(--secondary-color);
+    text-decoration: underline;
+}
+
+/* Estilo para el mensaje de error */
+.error-message {
+    color: var(--error-color);
+    font-size: 0.875rem;
+    margin-bottom: 10px;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .register-form {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .register-title {
+        font-size: 1.25rem;
+    }
 }
