@@ -5,8 +5,8 @@ Mi OpenLab es una plataforma web donde los usuarios pueden registrarse, iniciar 
 ## 🌐 Como ejecutar
 
 Desde consola: 
-npm install para todas las dependecias
-npm run dev
+- npm install para todas las dependecias
+- npm run dev
 
 ---
 
@@ -79,5 +79,4 @@ npm run dev
 1. Clona el repositorio:
 
    ```bash
-   git clone https://github.com/tu-usuario/mi-openlab.git
-   cd mi-openlab
+   git clone https://github.com/Ahiruk/PP2_FRONTEND.git
