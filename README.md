@@ -1,6 +1,6 @@
 # 🧪 Mi OpenLab
 
-Mi OpenLab es una plataforma web donde los usuarios pueden registrarse, iniciar sesión y gestionar sus propios proyectos de forma privada. Además, permite explorar públicamente proyectos creados por otros usuarios. Está construida con React, Firebase y TailwindCSS, ofreciendo una experiencia limpia, segura y visualmente agradable.
+Mi OpenLab es una plataforma web donde los usuarios pueden registrarse, iniciar sesión y gestionar sus propios proyectos de forma privada. Además, permite explorar públicamente proyectos creados por otros usuarios. Está construida con React, Firebase y CSS, ofreciendo una experiencia limpia, segura y visualmente agradable.
 
 ## 🌐 Como ejecutar
 
