@@ -145,7 +145,7 @@ const Profile = () => {
 )}
 
 
-      <button onClick={handleLogout} className="btn-new delete logout">
+      <button onClick={handleLogout} className="btn-new">
         Cerrar sesión
       </button>
     </div>
