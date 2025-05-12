@@ -1,14 +1,20 @@
-/* 🎯 Estilo minimalista y simple para login */
+/* Estilos base del body para evitar márgenes y forzar altura completa */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
 
+/* Centrado completo del contenedor del login */
 .login-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
-    padding: 20px;
+    height: 100vh;
     background-color: var(--background-color);
 }
 
+/* Formulario */
 .login-form {
     width: 100%;
     max-width: 450px;
@@ -29,12 +35,24 @@ body.dark .login-form {
     color: var(--primary-color);
 }
 
+/* Input */
+.input-field {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: white;
+    border: 1px solid #ccc;
+    color: var(--text-color);
+}
+
 body.dark .input-field {
     background-color: #2e2e42;
     border: 1px solid #444;
     color: var(--text-color);
 }
 
+/* Botón de enviar */
 .submit-btn {
     width: 90%;
     padding: 12px;
@@ -55,6 +73,7 @@ body.dark .input-field {
     background-color: var(--secondary-color);
 }
 
+/* Botón de volver */
 .return-btn {
     background: none;
     color: var(--primary-color);
@@ -74,6 +93,7 @@ body.dark .input-field {
     text-decoration: underline;
 }
 
+/* Errores */
 .error-message {
     color: var(--error-color);
     font-size: 0.875rem;
@@ -81,6 +101,7 @@ body.dark .input-field {
     text-align: center;
 }
 
+/* Responsive */
 @media (max-width: 768px) {
     .login-form {
         padding: 20px;
