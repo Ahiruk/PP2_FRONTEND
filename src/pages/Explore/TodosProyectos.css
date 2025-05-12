@@ -34,41 +34,30 @@
     background: var(--secondary-color);
 }
 
-/* Grid estilo Masonry */
+/* Nuevo grid adaptable */
 .todos-grid {
-    column-count: 3;
-    column-gap: 1rem;
-    padding-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
 }
 
-@media (max-width: 1024px) {
-    .todos-grid {
-        column-count: 2;
-    }
-}
-
-@media (max-width: 640px) {
-    .todos-grid {
-        column-count: 1;
-    }
-}
-
-/* Tarjeta de proyecto */
+/* Tarjetas de proyecto */
 .todos-card {
-    display: inline-block;
-    width: 100%;
     background: var(--accent-color);
-    margin: 0 0 1rem;
+    border-radius: 0.5rem;
     padding: 1rem;
     padding-top: 1.5rem;
-    border-radius: 0.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    min-height: 150px;
     position: relative;
-    transform: rotate(calc(var(--rnd)*1deg));
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* Banda superior */
+/* Banda superior decorativa */
 .todos-card::after {
     content: "";
     position: absolute;
@@ -81,17 +70,17 @@
     border-top-right-radius: 0.5rem;
 }
 
-/* Rotaciones aleatorias */
+/* Rotación aleatoria leve */
 .todos-card:nth-child(3n+1) {
-    --rnd: -2;
+    transform: rotate(-2deg);
 }
 
 .todos-card:nth-child(3n+2) {
-    --rnd: 1;
+    transform: rotate(1deg);
 }
 
 .todos-card:nth-child(3n+3) {
-    --rnd: -1;
+    transform: rotate(-1deg);
 }
 
 .todos-card:hover {
@@ -99,21 +88,30 @@
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Contenido de la tarjeta */
 .todos-card h2 {
     font-size: 1.25rem;
     color: var(--primary-color);
-    margin: 0 0 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .todos-card p {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: var(--text-color);
-    margin: 0 0 0.75rem;
+    margin-bottom: 0.75rem;
 }
 
 .todos-card a {
+    margin-top: auto;
     font-size: 0.9rem;
     color: var(--primary-color);
     text-decoration: underline;
+}
+
+/* Loading / Empty State */
+.loading,
+.no-projects {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-top: 2rem;
 }

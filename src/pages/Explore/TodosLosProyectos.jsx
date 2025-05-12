@@ -46,7 +46,7 @@ const TodosLosProyectos = () => {
         <div className="todos-grid">
           {projects.map(proj => (
             <div key={proj.id} className="todos-card">
-              <h2>Título: {proj.title}</h2>
+              <h2>{proj.title}</h2>
               <p>Autor: {proj.authorName || "Anónimo"}</p>
               <Link to={`/proyecto/${proj.id}`}>Más información</Link>
             </div>
