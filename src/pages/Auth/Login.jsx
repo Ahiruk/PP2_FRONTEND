@@ -40,39 +40,37 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+    <div className = "login-container">
       <form
         onSubmit={handleLogin}
-        className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md w-full max-w-md"
+        className = "login-form"
       >
-        <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white text-center">
+        <h2 className = "login-title" >
           Iniciar Sesión
         </h2>
 
         {error && (
-          <p className="mb-4 text-red-500 text-sm text-center">{error}</p>
+          <p className="error-message">{error}</p>
         )}
 
-        <div className="mb-4">
-          <label className="block mb-1 text-sm text-gray-700 dark:text-gray-300">
+        <div  className = "input-field">
+          <label label className = "input-label ">
             Correo electrónico
           </label>
           <input
             type="email"
-            className="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="ejemplo@correo.com"
           />
         </div>
 
-        <div className="mb-6">
-          <label className="block mb-1 text-sm text-gray-700 dark:text-gray-300">
+        <div className = "input-field" >
+          <label className = "input-label" >
             Contraseña
           </label>
           <input
             type="password"
-            className="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
@@ -81,7 +79,7 @@ const Login = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition"
+          className = "submit-btn"
         >
           Iniciar sesión
         </button>
