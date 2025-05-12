@@ -5,7 +5,7 @@ Mi OpenLab es una plataforma web donde los usuarios pueden registrarse, iniciar 
 ## 🌐 Como ejecutar
 
 Desde consola: 
-- npm install para todas las dependecias
+- npm install (para instalar todas las dependecias)
 - npm run dev
 
 ---
