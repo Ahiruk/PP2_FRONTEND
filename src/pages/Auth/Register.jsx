@@ -7,11 +7,41 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const navigate = useNavigate();
+
+  const validatePassword = (password) => {
+    const minLength = 6;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (password.length < minLength) {
+      return "La contraseña debe tener al menos 6 caracteres.";
+    }
+    if (!hasUpperCase) {
+      return "La contraseña debe contener al menos una letra mayúscula.";
+    }
+    if (!hasNumber) {
+      return "La contraseña debe contener al menos un número.";
+    }
+    if (!hasSpecialChar) {
+      return "La contraseña debe contener al menos un carácter especial.";
+    }
+    return "";
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setPasswordError("");
+
+    const passwordValidationError = validatePassword(password);
+    if (passwordValidationError) {
+      setPasswordError(passwordValidationError);
+      return;
+    }
+
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       navigate("/login"); // redirige al login después del registro exitoso
@@ -45,6 +75,7 @@ export default function Register() {
           className="w-full p-2 mb-4 border rounded"
           required
         />
+        {passwordError && <p className="text-red-500 mb-2">{passwordError}</p>}
         <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
           Registrarse
         </button>
