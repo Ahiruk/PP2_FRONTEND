@@ -1,55 +1,56 @@
 import { Routes, Route } from "react-router-dom";
-import Login from "../src/pages/Auth/Login"; // "Iniciar sesión"
-import Register from "../src/pages/Auth/Register"; // "Registro"
-import Profile from "../src/pages/Profile/Profile"; // "Mi Perfil"
-import NewProject from "../src/pages/Profile/NewProject"; // "Nuevo Proyecto"
+
+// Páginas públicas
+import Login from "../src/pages/Auth/Login";
+import Register from "../src/pages/Auth/Register";
 import TodosLosProyectos from "../src/pages/Explore/TodosLosProyectos";
 import MasInformacion from "../src/pages/Explore/MasInformacion";
-//import EditProject from "./pages/EditProject";
-//import Explore from "./pages/Explore";
-//import ProjectDetail from "./pages/ProjectDetail";
-import PrivateRoute from "../src/components/PrivateRoute"; // "Ruta Privada"
+
+// Páginas privadas
+import Profile from "../src/pages/Profile/Profile";
+import NewProject from "../src/pages/Profile/NewProject";
+
+// Componentes
+import PrivateRoute from "../src/components/PrivateRoute";
+import ThemeToggle from "../src/components/ThemeToggle"; // 🌙 Botón de tema
 
 function App() {
   return (
-    <Routes>
-      {/* Rutas públicas */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/todoslosproyectos" element={<TodosLosProyectos />} />
-      <Route path="/proyecto/:id" element={<MasInformacion />} />
-     {/*  <Route path="/explore" element={<Explore />} /> */}
-      {/* <Route path="/project/:id" element={<ProjectDetail />} /> */}
+    <>
+      {/* Botón flotante para cambiar entre modo claro/oscuro */}
+      <ThemeToggle />
 
-      {/* Rutas privadas */}
-      <Route
-        path="/profile"
-        element={
-          <PrivateRoute>
-            <Profile />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/profile/new"
-        element={
-          <PrivateRoute>
-            <NewProject />
-          </PrivateRoute>
-        }
-      />
-      {/* <Route
-        path="/profile/edit/:id"
-        element={
-          <PrivateRoute>
-            <EditProject />
-          </PrivateRoute>
-        }
-      /> */}
-    </Routes>
+      <Routes>
+        {/* 🌐 Rutas Públicas */}
+        <Route path="/" element={<TodosLosProyectos />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/todoslosproyectos" element={<TodosLosProyectos />} />
+        <Route path="/proyecto/:id" element={<MasInformacion />} />
+
+        {/* 🔒 Rutas Privadas */}
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile/new"
+          element={
+            <PrivateRoute>
+              <NewProject />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
+    </>
   );
 }
 
 export default App;
+
 // Este es el componente principal de la aplicación. Define las rutas de la aplicación utilizando react-router-dom.
 // Las rutas públicas incluyen el inicio de sesión, registro, exploración y detalles del proyecto.
