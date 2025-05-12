@@ -39,30 +39,21 @@ const ThemeMenu = () => {
 
   return (
     <div className="fixed top-4 left-4 z-50">
-      <button
-        onClick={() => setMenuOpen(!menuOpen)}
-        className="bg-gray-300 dark:bg-gray-800 text-black dark:text-white px-3 py-2 rounded shadow"
-      >
-        ☰
-      </button>
+      <div className="mt-2 bg-white dark:bg-gray-700 text-black dark:text-white rounded shadow p-2 space-y-1 w-36">
+        <button
+          onClick={activateLightMode}
+          className="w-full text-left px-1 py-0.5 text-sm hover:bg-gray-200 dark:hover:bg-gray-600 rounded"
+        >
+          ☀️
+        </button>
 
-      {menuOpen && (
-        <div className="mt-2 bg-white dark:bg-gray-700 text-black dark:text-white rounded shadow p-2 space-y-2 w-44">
-          <button
-            onClick={activateLightMode}
-            className="w-full text-left px-2 py-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded"
-          >
-            ☀️ Modo Claro
-          </button>
-
-          <button
-            onClick={activateDarkMode}
-            className="w-full text-left px-2 py-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded"
-          >
-            🌙 Modo Oscuro
-          </button>
-        </div>
-      )}
+        <button
+          onClick={activateDarkMode}
+          className="w-full text-left px-1 py-0.5 text-sm hover:bg-gray-200 dark:hover:bg-gray-600 rounded"
+        >
+          🌙
+        </button>
+      </div>
     </div>
   );
 };
