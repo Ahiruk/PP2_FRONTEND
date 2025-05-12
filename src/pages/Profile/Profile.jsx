@@ -5,6 +5,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../../services/firebase"; // Importa la referencia de Firebase Auth
+import "./Profile.css";
 
 const Profile = () => {
   const { user } = useAuth();
@@ -103,8 +104,9 @@ const Profile = () => {
   if (loading) return <p className="text-center mt-4">Cargando proyectos...</p>;
 
   return (
-    <div className="max-w-3xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-1">Tus Proyectos</h1>
+    <div className = "profile-container">
+    <div className = "profile-header" >
+      <h1>Tus Proyectos</h1>
       {user && (
         <div>
           <p className="text-gray-600 mb-4">
@@ -112,41 +114,25 @@ const Profile = () => {
           </p>
         </div>
       )}
-
-      <div className="mb-4">
-        <Link
-          to="/profile/new"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          + Nuevo Proyecto
-        </Link>
+      <div className = "separator" / >
       </div>
+
+ <Link to="/profile/new" className="btn-new">
+     + Nuevo Proyecto
+  </Link>
 
       {projects.length === 0 ? (
         <p>No tienes proyectos aún.</p>
       ) : (
-        <div className="grid gap-4">
-          {projects.map(project => (
-            <div key={project.id} className="border p-4 rounded shadow-sm">
-              <h2 className="text-xl font-semibold">
-                Título: {project.title}
-              </h2>
-              <p className="text-gray-700">
-                Descripción: {project.description}
-              </p>
-
-              <button
-                onClick={() => handleEdit(project)}
-                className="mt-2 text-blue-600 hover:underline"
-              >
-                Editar
-              </button>
-              <button
-                onClick={() => handleDelete(project.id)}
-                className="mt-2 text-red-600 hover:underline ml-2"
-              >
-                Eliminar
-              </button>
+        <div className="projects-grid">
+        {projects.map(project => (
+           <div key={project.id} className="project-card">
+             <h2>{project.title}</h2>
+            <p>{project.description}</p>
+              <div className="project-actions">
+                <button onClick={() => handleEdit(project)}>Editar</button>
+                <button className="delete" onClick={() => handleDelete(project.id)}>Eliminar</button>
+              </div>
             </div>
           ))}
         </div>
@@ -196,7 +182,7 @@ const Profile = () => {
       <div className="mt-6">
         <button
           onClick={handleLogout}
-          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+         className = "btn-new delete"
         >
           Cerrar sesión
         </button>
