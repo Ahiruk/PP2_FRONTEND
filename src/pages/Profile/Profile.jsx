@@ -1,4 +1,3 @@
-// Profile.jsx
 import { useEffect, useState } from "react";
 import {
   collection,
@@ -57,11 +56,14 @@ const Profile = () => {
   };
 
   const handleSave = async () => {
-    if (!editedTitle || !editedDescription) {
+    if (!editedTitle.trim() || !editedDescription.trim()) {
       return alert("Por favor completa todos los campos");
     }
     const ref = doc(db, "projects", editingProject.id);
-    await updateDoc(ref, { title: editedTitle, description: editedDescription });
+    await updateDoc(ref, {
+      title: editedTitle,
+      description: editedDescription,
+    });
     setProjects(ps =>
       ps.map(p =>
         p.id === editingProject.id
@@ -77,8 +79,7 @@ const Profile = () => {
     navigate("/login");
   };
 
-  if (loading)
-    return <p className="loading">Cargando proyectos...</p>;
+  if (loading) return <p className="loading">Cargando proyectos...</p>;
 
   return (
     <div className="profile-container">
@@ -119,26 +120,30 @@ const Profile = () => {
       )}
 
       {editingProject && (
-        <div className="edit-form">
-          <h3>Editar Proyecto</h3>
-          <label>Título:</label>
-          <input
-            value={editedTitle}
-            onChange={e => setEditedTitle(e.target.value)}
-          />
-          <label>Descripción:</label>
-          <textarea
-            value={editedDescription}
-            onChange={e => setEditedDescription(e.target.value)}
-          />
-          <button onClick={handleSave} className="btn-save">
-            Guardar Cambios
-          </button>
-          <button onClick={() => setEditingProject(null)} className="btn-cancel">
-            Cancelar
-          </button>
-        </div>
-      )}
+  <>
+    <div className="modal-backdrop" />
+    <div className="edit-form">
+      <h3>Editar Proyecto</h3>
+      <label>Título:</label>
+      <input
+        value={editedTitle}
+        onChange={e => setEditedTitle(e.target.value)}
+      />
+      <label>Descripción:</label>
+      <textarea
+        value={editedDescription}
+        onChange={e => setEditedDescription(e.target.value)}
+      />
+      <button onClick={handleSave} className="btn-save">
+        Guardar Cambios
+      </button>
+      <button onClick={() => setEditingProject(null)} className="btn-cancel">
+        Cancelar
+      </button>
+    </div>
+  </>
+)}
+
 
       <button onClick={handleLogout} className="btn-new delete logout">
         Cerrar sesión
@@ -148,3 +153,5 @@ const Profile = () => {
 };
 
 export default Profile;
+// Este componente muestra la información del perfil del usuario, incluyendo sus proyectos.
+// Permite editar y eliminar proyectos, así como cerrar sesión. Utiliza Firebase para la autenticación y la gestión de datos.
