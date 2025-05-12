@@ -2,6 +2,7 @@ import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../services/firebase";
 import { useNavigate } from "react-router-dom";
+import "./Register.css";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -55,16 +56,19 @@ export default function Register() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-80">
-        <h2 className="text-xl font-bold mb-4">Registro</h2>
-        {error && <p className="text-red-500 mb-2">{error}</p>}
+    <div className = "register-container">
+      <form onSubmit = {
+          handleSubmit
+      }
+      className = "register-form">
+        <h2 className="register-title">Registro</h2>
+        {error && <p className="error-message">{error}</p>}
         <input
           type="email"
           placeholder="Correo electrónico"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 mb-4 border rounded"
+          className="input-field"
           required
         />
         <input
@@ -72,19 +76,20 @@ export default function Register() {
           placeholder="Contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 mb-4 border rounded"
+          className="input-field"
           required
-        />
-        {passwordError && <p className="text-red-500 mb-2">{passwordError}</p>}
-        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
+        />  
+        {passwordError && <p className="error-message">{passwordError}</p>}
+        <button type="submit" className="submit-btn">
           Registrarse
         </button>
 
-        <button
-          type="button"
-          onClick={goToLogin}
-          className="w-full mt-3 bg-gray-300 hover:bg-gray-400 text-gray-800 p-2 rounded"
-        >
+        <button button
+        type = "button"
+        onClick = {
+            goToLogin
+        }
+        className = "return-btn" >
           Volver al Login
         </button>
       </form>

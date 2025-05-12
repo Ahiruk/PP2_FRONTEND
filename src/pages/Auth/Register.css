@@ -4,7 +4,8 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background-color: var(--background-color);
+    padding: 20px;
+    background-color: #EEF5FF;
 }
 
 .register-form {
