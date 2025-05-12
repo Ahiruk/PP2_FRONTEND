@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { collection, getDocs, query, where, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { useAuth } from "../../hooks/useAuth";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../../services/firebase"; // Importa la referencia de Firebase Auth
 
 const Profile = () => {
   const { user } = useAuth();
@@ -11,6 +13,7 @@ const Profile = () => {
   const [editingProject, setEditingProject] = useState(null); // Para saber qué proyecto estamos editando
   const [editedTitle, setEditedTitle] = useState("");
   const [editedDescription, setEditedDescription] = useState("");
+  const navigate = useNavigate();
 
   const fetchProjects = async () => {
     if (!user?.uid) return; // Si el usuario no está logueado, no hacer nada
@@ -78,6 +81,15 @@ const Profile = () => {
       setEditedDescription("");
     } catch (error) {
       console.error("❌ Error al actualizar proyecto:", error);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate("/login"); // Redirige al login después de desloguearse
+    } catch (error) {
+      console.error("❌ Error al desloguearse:", error);
     }
   };
 
@@ -180,6 +192,15 @@ const Profile = () => {
           </button>
         </div>
       )}
+
+      <div className="mt-6">
+        <button
+          onClick={handleLogout}
+          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+        >
+          Cerrar sesión
+        </button>
+      </div>
     </div>
   );
 };

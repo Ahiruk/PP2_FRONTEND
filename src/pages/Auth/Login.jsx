@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../services/firebase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom"; // 👈 Importar Link
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -93,6 +93,13 @@ const Login = () => {
         >
           Ver todos los proyectos
         </button>
+
+        <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-300">
+          ¿No tienes una cuenta?{" "}
+          <Link to="/register" className="text-blue-600 hover:underline">
+            Crear una cuenta
+          </Link>
+        </p>
       </form>
     </div>
   );
