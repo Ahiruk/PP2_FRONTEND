@@ -10,12 +10,12 @@
 
 /* 🌙 Tema Oscuro */
 body.dark {
-  --primary-color: #3B82F6;     /* Azul más vibrante (tipo Tailwind blue-500) */
-  --secondary-color: #60A5FA;   /* Azul más claro, pero aún saturado */
-  --accent-color: #1E40AF;      /* Azul oscuro para contraste (tipo blue-900) */
-  --background-color: #1E1E2F;
-  --text-color: #f1f1f1;
-  --error-color: #FF6B6B;
+  --primary-color: #021526;     /* Azul muy oscuro, casi negro */
+--secondary-color: #03346E;   /* Azul profundo, ideal para fondos secundarios */
+--accent-color: #6EACDA;      /* Azul claro, ideal como color de acento */
+--background-color: #021526;  /* Igual que primary, creando un fondo oscuro uniforme */
+--text-color: #E2E2B6;        /* Amarillo muy pálido, buena visibilidad sobre fondo oscuro */
+--error-color: #FF6B6B;       /* Se mantiene para errores */
 }
 
 /* ✅ Tipografías globales */
