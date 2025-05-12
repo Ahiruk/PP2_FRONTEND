@@ -35,6 +35,10 @@ const Login = () => {
     }
   };
 
+  const goToTodosLosProyectos = () => {
+    navigate("/todoslosproyectos");
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
       <form
@@ -81,11 +85,20 @@ const Login = () => {
         >
           Iniciar sesión
         </button>
+
+        <button
+          type="button"
+          onClick={goToTodosLosProyectos}
+          className="w-full mt-4 bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md transition"
+        >
+          Ver todos los proyectos
+        </button>
       </form>
     </div>
   );
 };
 
 export default Login;
+
 // Este componente de inicio de sesión utiliza Firebase Authentication para autenticar a los usuarios.
 // Se utiliza el hook useState para manejar el estado del correo electrónico, la contraseña y los errores.

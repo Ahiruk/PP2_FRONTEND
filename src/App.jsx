@@ -3,6 +3,8 @@ import Login from "../src/pages/Auth/Login"; // "Iniciar sesión"
 import Register from "../src/pages/Auth/Register"; // "Registro"
 import Profile from "../src/pages/Profile/Profile"; // "Mi Perfil"
 import NewProject from "../src/pages/Profile/NewProject"; // "Nuevo Proyecto"
+import TodosLosProyectos from "../src/pages/Explore/TodosLosProyectos";
+import MasInformacion from "../src/pages/Explore/MasInformacion";
 //import EditProject from "./pages/EditProject";
 //import Explore from "./pages/Explore";
 //import ProjectDetail from "./pages/ProjectDetail";
@@ -14,6 +16,8 @@ function App() {
       {/* Rutas públicas */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/todoslosproyectos" element={<TodosLosProyectos />} />
+      <Route path="/proyecto/:id" element={<MasInformacion />} />
      {/*  <Route path="/explore" element={<Explore />} /> */}
       {/* <Route path="/project/:id" element={<ProjectDetail />} /> */}
 
