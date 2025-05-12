@@ -10,11 +10,11 @@
 
 /* 🌙 Tema Oscuro */
 body.dark {
-  --primary-color: #4F98CA;
+  --primary-color: #f1f1f1;
   --secondary-color: #A7C7E7;
   --accent-color: #6799C6;
   --background-color: #1E1E2F;
-  --text-color: #f1f1f1;
+  --text-color: #cacaca;
   --error-color: #FF6B6B;
 }
 
