@@ -1,5 +1,3 @@
-// Register.jsx
-// Este componente permite a los usuarios registrarse en la aplicación utilizando Firebase Authentication.
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../services/firebase";
@@ -16,10 +14,14 @@ export default function Register() {
     setError("");
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      navigate("/"); // redirige al inicio después del registro
+      navigate("/login"); // redirige al login después del registro exitoso
     } catch (err) {
       setError(err.message);
     }
+  };
+
+  const goToLogin = () => {
+    navigate("/login");
   };
 
   return (
@@ -45,6 +47,14 @@ export default function Register() {
         />
         <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
           Registrarse
+        </button>
+
+        <button
+          type="button"
+          onClick={goToLogin}
+          className="w-full mt-3 bg-gray-300 hover:bg-gray-400 text-gray-800 p-2 rounded"
+        >
+          Volver al Login
         </button>
       </form>
     </div>

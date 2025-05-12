@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../services/firebase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom"; // 👈 Importar Link
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -33,6 +33,10 @@ const Login = () => {
         setError("Error al iniciar sesión.");
       }
     }
+  };
+
+  const goToTodosLosProyectos = () => {
+    navigate("/todoslosproyectos");
   };
 
   return (
@@ -81,11 +85,27 @@ const Login = () => {
         >
           Iniciar sesión
         </button>
+
+        <button
+          type="button"
+          onClick={goToTodosLosProyectos}
+          className="w-full mt-4 bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md transition"
+        >
+          Ver todos los proyectos
+        </button>
+
+        <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-300">
+          ¿No tienes una cuenta?{" "}
+          <Link to="/register" className="text-blue-600 hover:underline">
+            Crear una cuenta
+          </Link>
+        </p>
       </form>
     </div>
   );
 };
 
 export default Login;
+
 // Este componente de inicio de sesión utiliza Firebase Authentication para autenticar a los usuarios.
 // Se utiliza el hook useState para manejar el estado del correo electrónico, la contraseña y los errores.

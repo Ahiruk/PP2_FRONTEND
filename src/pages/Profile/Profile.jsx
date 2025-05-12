@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
-import { collection, getDocs, query, where, deleteDoc, doc } from "firebase/firestore";
+import { collection, getDocs, query, where, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { useAuth } from "../../hooks/useAuth";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../../services/firebase"; // Importa la referencia de Firebase Auth
 
 const Profile = () => {
   const { user } = useAuth();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [editingProject, setEditingProject] = useState(null); // Para saber qué proyecto estamos editando
+  const [editedTitle, setEditedTitle] = useState("");
+  const [editedDescription, setEditedDescription] = useState("");
+  const navigate = useNavigate();
 
   const fetchProjects = async () => {
     if (!user?.uid) return; // Si el usuario no está logueado, no hacer nada
@@ -42,6 +48,51 @@ const Profile = () => {
     }
   };
 
+  const handleEdit = (project) => {
+    setEditingProject(project);
+    setEditedTitle(project.title);
+    setEditedDescription(project.description);
+  };
+
+  const handleSave = async () => {
+    if (!editedTitle || !editedDescription) {
+      alert("Por favor completa todos los campos");
+      return;
+    }
+
+    try {
+      const projectRef = doc(db, "projects", editingProject.id);
+      await updateDoc(projectRef, {
+        title: editedTitle,
+        description: editedDescription,
+      });
+
+      // Actualizar el proyecto en el estado local
+      setProjects(prev =>
+        prev.map(project =>
+          project.id === editingProject.id
+            ? { ...project, title: editedTitle, description: editedDescription }
+            : project
+        )
+      );
+
+      setEditingProject(null); // Cerrar el formulario de edición
+      setEditedTitle(""); // Limpiar campos
+      setEditedDescription("");
+    } catch (error) {
+      console.error("❌ Error al actualizar proyecto:", error);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate("/login"); // Redirige al login después de desloguearse
+    } catch (error) {
+      console.error("❌ Error al desloguearse:", error);
+    }
+  };
+
   useEffect(() => {
     if (user?.uid) {
       console.log("✅ Usuario autenticado:", user.uid);
@@ -59,7 +110,6 @@ const Profile = () => {
           <p className="text-gray-600 mb-4">
             Conectado como: <span className="font-medium">{user.email}</span>
           </p>
-          {/* Mostrar el UID del usuario logueado */}
         </div>
       )}
 
@@ -78,16 +128,22 @@ const Profile = () => {
         <div className="grid gap-4">
           {projects.map(project => (
             <div key={project.id} className="border p-4 rounded shadow-sm">
-              {/* Mostrar solo el título y la descripción con el prefijo */}
               <h2 className="text-xl font-semibold">
                 Título: {project.title}
               </h2>
               <p className="text-gray-700">
                 Descripción: {project.description}
               </p>
+
+              <button
+                onClick={() => handleEdit(project)}
+                className="mt-2 text-blue-600 hover:underline"
+              >
+                Editar
+              </button>
               <button
                 onClick={() => handleDelete(project.id)}
-                className="mt-2 text-red-600 hover:underline"
+                className="mt-2 text-red-600 hover:underline ml-2"
               >
                 Eliminar
               </button>
@@ -95,6 +151,56 @@ const Profile = () => {
           ))}
         </div>
       )}
+
+      {editingProject && (
+        <div className="mt-4 border p-4 rounded shadow-sm">
+          <h3 className="text-xl font-semibold mb-2">Editar Proyecto</h3>
+          <div className="mb-4">
+            <label className="block mb-2" htmlFor="title">
+              Título:
+            </label>
+            <input
+              type="text"
+              id="title"
+              value={editedTitle}
+              onChange={(e) => setEditedTitle(e.target.value)}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-2" htmlFor="description">
+              Descripción:
+            </label>
+            <textarea
+              id="description"
+              value={editedDescription}
+              onChange={(e) => setEditedDescription(e.target.value)}
+              className="w-full p-2 border rounded"
+            ></textarea>
+          </div>
+          <button
+            onClick={handleSave}
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          >
+            Guardar Cambios
+          </button>
+          <button
+            onClick={() => setEditingProject(null)}
+            className="ml-2 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+          >
+            Cancelar
+          </button>
+        </div>
+      )}
+
+      <div className="mt-6">
+        <button
+          onClick={handleLogout}
+          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+        >
+          Cerrar sesión
+        </button>
+      </div>
     </div>
   );
 };

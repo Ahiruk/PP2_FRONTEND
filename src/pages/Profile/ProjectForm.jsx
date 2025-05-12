@@ -29,13 +29,17 @@ const ProjectForm = () => {
         authorName: user.email,
         createdAt: serverTimestamp(),
       });
-      navigate('/profile');
+      navigate('/profile'); // Redirigir a la página de perfil después de guardar el proyecto
     } catch (err) {
       setError('Error al guardar el proyecto');
       console.error(err);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleBackToProfile = () => {
+    navigate('/profile'); // Redirigir a la página de perfil
   };
 
   return (
@@ -61,17 +65,28 @@ const ProjectForm = () => {
           required
         />
       </div>
-      <button
-        type="submit"
-        disabled={loading}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-      >
-        {loading ? 'Guardando...' : 'Guardar Proyecto'}
-      </button>
+      <div className="flex justify-between">
+        <button
+          type="submit"
+          disabled={loading}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          {loading ? 'Guardando...' : 'Guardar Proyecto'}
+        </button>
+
+        <button
+          type="button"
+          onClick={handleBackToProfile}
+          className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+        >
+          Volver a mis proyectos
+        </button>
+      </div>
     </form>
   );
 };
 
 export default ProjectForm;
+
 // Este componente es un formulario para crear o editar proyectos. Permite al usuario ingresar un título y una descripción.
 // Al enviar el formulario, se guarda el proyecto en Firestore y se redirige al usuario a su perfil. También maneja errores y muestra un mensaje de carga mientras se guarda el proyecto.
