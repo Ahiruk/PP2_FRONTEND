@@ -2,7 +2,7 @@ import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../services/firebase";
 import { useNavigate, Link } from "react-router-dom";
-import "./Login.css"; // Asegúrate de que este import esté
+import "./Login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -41,7 +41,7 @@ const Login = () => {
   };
 
   return (
-      <div className="login-container">
+    <div className="login-container">
       <form onSubmit={handleLogin} className="login-form">
         <div className="form-header">
           <h2 className="login-title">Iniciar Sesión</h2>
@@ -71,6 +71,8 @@ const Login = () => {
               placeholder="••••••••"
             />
           </div>
+
+          
         </div>
 
         <div className="button-group">
@@ -92,6 +94,12 @@ const Login = () => {
             <Link to="/register" className="link-register">
               Crear una cuenta
             </Link>
+            {/* Enlace para recuperar contraseña */}
+          <div className="forgot-password-link">
+            <Link to="/forgot-password" className="link-forgot-password">
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </div>
           </p>
         </div>
       </form>
@@ -100,6 +108,3 @@ const Login = () => {
 };
 
 export default Login;
-
-// Este componente de inicio de sesión utiliza Firebase Authentication para autenticar a los usuarios.
-// Se utiliza el hook useState para manejar el estado del correo electrónico, la contraseña y los errores.

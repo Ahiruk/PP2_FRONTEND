@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 // Páginas públicas
 import Login from "../src/pages/Auth/Login";
 import Register from "../src/pages/Auth/Register";
+import ForgotPassword from "../src/pages/Auth/ForgotPassword"; // 🆕
 import TodosLosProyectos from "../src/pages/Explore/TodosLosProyectos";
 import MasInformacion from "../src/pages/Explore/MasInformacion";
 
@@ -12,12 +13,11 @@ import NewProject from "../src/pages/Profile/NewProject";
 
 // Componentes
 import PrivateRoute from "../src/components/PrivateRoute";
-import ThemeToggle from "../src/components/ThemeToggle"; // 🌙 Botón de tema
+import ThemeToggle from "../src/components/ThemeToggle";
 
 function App() {
   return (
     <>
-      {/* Botón flotante para cambiar entre modo claro/oscuro */}
       <ThemeToggle />
 
       <Routes>
@@ -25,6 +25,7 @@ function App() {
         <Route path="/" element={<TodosLosProyectos />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} /> {/* 🆕 */}
         <Route path="/todoslosproyectos" element={<TodosLosProyectos />} />
         <Route path="/proyecto/:id" element={<MasInformacion />} />
 
@@ -51,6 +52,7 @@ function App() {
 }
 
 export default App;
+
 
 // Este es el componente principal de la aplicación. Define las rutas de la aplicación utilizando react-router-dom.
 // Las rutas públicas incluyen el inicio de sesión, registro, exploración y detalles del proyecto.
