@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import "./Register.css";
 
 export default function Register() {
+  const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
@@ -31,24 +32,42 @@ export default function Register() {
     return "";
   };
 
+  const isInstitutionalEmail = (email) => {
+    return email.endsWith("@uninorte.edu.co");
+  };
+
+  const nextStep = () => {
+    if (!name || !email || !password) {
+      setError("Por favor completa todos los campos.");
+      return;
+    }
+    if (!isInstitutionalEmail(email)) {
+      setError("Solo se permite el correo institucional @uninorte.edu.co");
+      return;
+    }
+    const pwdError = validatePassword(password);
+    if (pwdError) {
+      setPasswordError(pwdError);
+      return;
+    }
+    setError("");
+    setPasswordError("");
+    setStep(2);
+  };
+
+  const prevStep = () => setStep(1);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setPasswordError("");
     setSuccessMessage("Registrado exitosamente");
 
-    const passwordValidationError = validatePassword(password);
-    if (passwordValidationError) {
-      setPasswordError(passwordValidationError);
-      return;
-    }
-
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const uid = userCredential.user.uid;
 
       let photoURL = "";
-
       if (photo) {
         const storageRef = ref(storage, `profile_pictures/${uid}-${uuidv4()}`);
         await uploadBytes(storageRef, photo);
@@ -61,82 +80,71 @@ export default function Register() {
         name,
         bio,
         photoURL,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       });
 
       setSuccessMessage("Registrado correctamente");
-      navigate("/profile");  // redirige inmediatamente
-
+      navigate("/profile");
     } catch (err) {
       setError(err.message);
     }
   };
 
-  const goToProfile = () => {
-    navigate("/profile");
-  };
-
-  const goToLogin = () => {
-    navigate("/login");
-  };
-
   return (
-    <div className="register-container">
-      <form onSubmit={handleSubmit} className="register-form">
-        <h2 className="register-title">Registro</h2>
-        {error && <p className="error-message">{error}</p>}
-        {successMessage && <p className="success-message">{successMessage}</p>}
+    <div className="register-wrapper">
+      <div className="register-card">
+        <div className="register-image-section">
+          <img src="/assets/signup-illustration.png" alt="Registro" />
+        </div>
+        <form onSubmit={handleSubmit} className="register-form">
+          <div className="progress-bar">
+            <div className={`step ${step >= 1 ? 'active' : ''}`}></div>
+            <div className={`step ${step >= 2 ? 'active' : ''}`}></div>
+          </div>
 
-        <input
-          type="email"
-          placeholder="Correo electrónico"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="input-field"
-          required
-        />
+          <h2 className="register-title">Crea tu cuenta</h2>
+          {error && <p className="error-message">{error}</p>}
+          {successMessage && <p className="success-message">{successMessage}</p>}
 
-        <input
-          type="text"
-          placeholder="Nombre de usuario"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="input-field"
-          required
-        />
+          {step === 1 && (
+            <div className="form-step animate-step">
+              <label>Nombre</label>
+              <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
 
-        <textarea
-          placeholder="Biografía (opcional)"
-          value={bio}
-          onChange={(e) => setBio(e.target.value)}
-          className="input-field"
-          rows="3"
-        />
+              <label>Correo institucional</label>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="tucorreo@uninorte.edu.co" />
 
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setPhoto(e.target.files[0])}
-          className="input-field"
-        />
+              <label>Contraseña</label>
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              {passwordError && <p className="error-message">{passwordError}</p>}
 
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="input-field"
-          required
-        />
+              <button type="button" onClick={nextStep} className="submit-btn">Siguiente</button>
+            </div>
+          )}
 
-        {passwordError && <p className="error-message">{passwordError}</p>}
+          {step === 2 && (
+            <div className="form-step animate-step">
+              <label>Biografía</label>
+              <textarea value={bio} onChange={(e) => setBio(e.target.value)} rows="3" />
 
-        <button type="submit" className="submit-btn">Registrarse</button>
+              <label>Foto de perfil</label>
+              <input type="file" accept="image/*" onChange={(e) => setPhoto(e.target.files[0])} />
 
-        <button type="button" onClick={goToLogin} className="return-btn">
-          Volver al Login
-        </button>
-      </form>
+              <button type="submit" className="submit-btn">Registrarse</button>
+              <button type="button" onClick={prevStep} className="return-btn">Atrás</button>
+            </div>
+          )}
+        </form>
+        {successMessage && (
+  <div className="success-modal">
+  <img src="/assets/success-icon.png" alt="Éxito" />
+    <h3>¡Registro Exitoso!</h3>
+    <p>Tu cuenta ha sido creada correctamente.</p>
+    <button onClick={() => navigate("/profile")}>Ir al perfil</button>
+  </div>
+)}
+
+      </div>
     </div>
   );
 }
