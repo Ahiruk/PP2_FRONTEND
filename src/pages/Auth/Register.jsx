@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db, storage } from "../../services/firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { auth, db } from "../../services/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
 import "./Register.css";
 
 export default function Register() {
@@ -18,6 +16,9 @@ export default function Register() {
   const [passwordError, setPasswordError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
+
+  const CLOUDINARY_URL = import.meta.env.VITE_CLOUDINARY_URL;
+  const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_PRESET;
 
   const validatePassword = (password) => {
     const minLength = 6;
@@ -57,6 +58,20 @@ export default function Register() {
 
   const prevStep = () => setStep(1);
 
+  const uploadToCloudinary = async (file) => {
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+    const res = await fetch(CLOUDINARY_URL, {
+      method: "POST",
+      body: data,
+    });
+    const json = await res.json();
+    if (!json.secure_url) throw new Error("Error al subir imagen a Cloudinary");
+    return json.secure_url;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -69,12 +84,10 @@ export default function Register() {
 
       let photoURL = "";
       if (photo) {
-        const storageRef = ref(storage, `profile_pictures/${uid}-${uuidv4()}`);
-        await uploadBytes(storageRef, photo);
-        photoURL = await getDownloadURL(storageRef);
+        photoURL = await uploadToCloudinary(photo);
       }
 
-      await setDoc(doc(db, "users", uid), {
+      await setDoc(doc(db, "usuarios", uid), {
         uid,
         email,
         name,
@@ -120,13 +133,10 @@ export default function Register() {
 
               <button type="button" onClick={nextStep} className="submit-btn">Siguiente</button>
 
-<p className="login-link-text">
-  ¿Ya tienes cuenta?{" "}
-  <span className="login-link" onClick={() => navigate("/login")}>
-    Inicia sesión
-  </span>
-</p>
-
+              <p className="login-link-text">
+                ¿Ya tienes cuenta?{" "}
+                <span className="login-link" onClick={() => navigate("/login")}>Inicia sesión</span>
+              </p>
             </div>
           )}
 
@@ -144,14 +154,13 @@ export default function Register() {
           )}
         </form>
         {successMessage && (
-  <div className="success-modal">
-  <img src="/assets/success-icon.png" alt="Éxito" />
-    <h3>¡Registro Exitoso!</h3>
-    <p>Tu cuenta ha sido creada correctamente.</p>
-    <button onClick={() => navigate("/profile")}>Ir al perfil</button>
-  </div>
-)}
-
+          <div className="success-modal">
+            <img src="/assets/success-icon.png" alt="Éxito" />
+            <h3>¡Registro Exitoso!</h3>
+            <p>Tu cuenta ha sido creada correctamente.</p>
+            <button onClick={() => navigate("/profile")}>Ir al perfil</button>
+          </div>
+        )}
       </div>
     </div>
   );
