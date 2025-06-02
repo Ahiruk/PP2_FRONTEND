@@ -19,7 +19,7 @@ const TodosLosProyectos = () => {
           ...doc.data(),
         }));
         
-        setProjects(results);
+        setProjects(results.filter(proj => proj.deleted !== true)); 
       } catch (error) {
         console.error("❌ Error al obtener todos los proyectos:", error);
       } finally {

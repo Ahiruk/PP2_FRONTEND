@@ -4,7 +4,6 @@ import {
   getDocs,
   query,
   where,
-  deleteDoc,
   doc,
   updateDoc,
 } from "firebase/firestore";
@@ -33,7 +32,9 @@ const Profile = () => {
           where("uid", "==", user.uid)
         );
         const snap = await getDocs(q);
-        setProjects(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+        const all = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        // Solo mostrar proyectos no eliminados (deleted !== true)
+        setProjects(all.filter(p => p.deleted !== true));
       } catch (e) {
         console.error(e);
       } finally {
@@ -45,8 +46,11 @@ const Profile = () => {
 
   const handleDelete = async id => {
     if (!window.confirm("¿Eliminar este proyecto?")) return;
-    await deleteDoc(doc(db, "projects", id));
-    setProjects(p => p.filter(x => x.id !== id));
+    // Marcamos como eliminado en la base
+    const ref = doc(db, "projects", id);
+    await updateDoc(ref, { deleted: true });
+    // Actualizamos la UI
+    setProjects(prev => prev.filter(p => p.id !== id));
   };
 
   const handleEdit = proj => {
@@ -79,7 +83,7 @@ const Profile = () => {
     navigate("/login");
   };
 
-   if (loading) {
+  if (loading) {
     return (
       <div className="mi-loading-container">
         <div className="loader"></div>
@@ -87,25 +91,20 @@ const Profile = () => {
       </div>
     );
   }
+
   return (
     <div className="profile-container">
       <div className="profile-header">
         <h1>Tus Proyectos</h1>
         {user && (
           <p className="subtext">
-            📙 Bienvenid@  <span>{user.email}</span>
+            📙 Bienvenid@ <span>{user.email}</span>
           </p>
         )}
-        
         <div className="separator" />
       </div>
 
-      <button
-        className="btn-new"
-        onClick={() => navigate("/profile/new")}
-      >
-        + Nuevo Proyecto
-      </button>
+      <button className="btn-new" onClick={() => navigate("/profile/new")}>+ Nuevo Proyecto</button>
 
       {projects.length === 0 ? (
         <p className="no-projects">No tienes proyectos aún.</p>
@@ -117,10 +116,7 @@ const Profile = () => {
               <p>{project.description}</p>
               <div className="project-actions">
                 <button onClick={() => handleEdit(project)}>Editar</button>
-                <button
-                  className="delete"
-                  onClick={() => handleDelete(project.id)}
-                >
+                <button className="delete" onClick={() => handleDelete(project.id)}>
                   Eliminar
                 </button>
               </div>
@@ -135,33 +131,18 @@ const Profile = () => {
           <div className="edit-form">
             <h3>Editar Proyecto</h3>
             <label>Título:</label>
-            <input
-              value={editedTitle}
-              onChange={e => setEditedTitle(e.target.value)}
-            />
+            <input value={editedTitle} onChange={e => setEditedTitle(e.target.value)} />
             <label>Descripción:</label>
-            <textarea
-              value={editedDescription}
-              onChange={e => setEditedDescription(e.target.value)}
-            />
-            <button onClick={handleSave} className="btn-save">
-              Guardar Cambios
-            </button>
-            <button onClick={() => setEditingProject(null)} className="btn-cancel">
-              Cancelar
-            </button>
+            <textarea value={editedDescription} onChange={e => setEditedDescription(e.target.value)} />
+            <button onClick={handleSave} className="btn-save">Guardar Cambios</button>
+            <button onClick={() => setEditingProject(null)} className="btn-cancel">Cancelar</button>
           </div>
         </>
       )}
 
-
-      <button onClick={handleLogout} className="btn-new">
-        Cerrar sesión
-      </button>
+      <button onClick={handleLogout} className="btn-new">Cerrar sesión</button>
     </div>
   );
 };
 
 export default Profile;
-// Este componente muestra la información del perfil del usuario, incluyendo sus proyectos.
-// Permite editar y eliminar proyectos, así como cerrar sesión. Utiliza Firebase para la autenticación y la gestión de datos.
