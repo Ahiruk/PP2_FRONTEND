@@ -119,6 +119,14 @@ export default function Register() {
               {passwordError && <p className="error-message">{passwordError}</p>}
 
               <button type="button" onClick={nextStep} className="submit-btn">Siguiente</button>
+
+<p className="login-link-text">
+  ¿Ya tienes cuenta?{" "}
+  <span className="login-link" onClick={() => navigate("/login")}>
+    Inicia sesión
+  </span>
+</p>
+
             </div>
           )}
 

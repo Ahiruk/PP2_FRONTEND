@@ -9,6 +9,11 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const isInstitutionalEmail = (email) => {
+    return email.endsWith("@uninorte.edu.co");
+  };
+  
+
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -17,6 +22,11 @@ const Login = () => {
 
     if (!email || !password) {
       setError("Por favor completa todos los campos.");
+      return;
+    }
+
+    if (!isInstitutionalEmail(email)) {
+      setError("Solo se permite el correo institucional @uninorte.edu.co");
       return;
     }
 
@@ -35,6 +45,7 @@ const Login = () => {
       }
     }
   };
+  
 
   const goToTodosLosProyectos = () => {
     navigate("/todoslosproyectos");
@@ -54,10 +65,11 @@ const Login = () => {
             <input
               id="email"
               type="email"
-              className="input-field"
+              className={`input-field ${error.includes("correo") ? "shake" : ""}`}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="ejemplo@correo.com"
+              placeholder = "usuario@uninorte.edu.co"
+
             />
           </div>
           <div className="form-group">
@@ -65,7 +77,7 @@ const Login = () => {
             <input
               id="password"
               type="password"
-              className="input-field"
+              className={`input-field ${error.includes("Contraseña") ? "shake" : ""}`}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"

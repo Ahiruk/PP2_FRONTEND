@@ -181,6 +181,27 @@ body.dark .register-form textarea {
     }
 }
 
+.login-link-text {
+    text-align: center;
+    font-size: 0.95rem;
+    margin-top: 15px;
+    color: var(--text-color);
+    animation: fadeIn 1s ease forwards;
+    opacity: 0;
+}
+
+.login-link {
+    color: var(--primary-color);
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+}
+
+.login-link:hover {
+    color: var(--secondary-color);
+}
+
 .submit-btn {
     width: 85%;
     padding: 12px;
