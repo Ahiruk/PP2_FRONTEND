@@ -11,6 +11,7 @@ const ProjectForm = () => {
   const [tag, setTag] = useState("JavaScript");
   const [visibility, setVisibility] = useState("public");
   const [imageFile, setImageFile] = useState(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(""); // <-- nuevo estado para preview
   const [githubLink, setGithubLink] = useState("");
   const [videoLink, setVideoLink] = useState("");
   const [error, setError] = useState(null);
@@ -45,6 +46,14 @@ const ProjectForm = () => {
       return true;
     } catch {
       return false;
+    }
+  };
+
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setImageFile(file);
+      setImagePreviewUrl(URL.createObjectURL(file)); // <-- creamos preview
     }
   };
 
@@ -152,8 +161,15 @@ const ProjectForm = () => {
           id="image"
           type="file"
           accept="image/*"
-          onChange={(e) => setImageFile(e.target.files[0])}
+          onChange={handleImageChange} // <-- usamos función con preview
         />
+        {imagePreviewUrl && (
+          <img
+            src={imagePreviewUrl}
+            alt="Preview imagen seleccionada"
+            style={{ width: "100%", maxHeight: "150px", marginTop: "10px", objectFit: "cover" }}
+          />
+        )}
       </div>
 
       <div className="form-group">
