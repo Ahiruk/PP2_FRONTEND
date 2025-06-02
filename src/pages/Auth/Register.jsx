@@ -1,15 +1,24 @@
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../services/firebase";
+import { auth, db } from "../../services/firebase";
+import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
 
 export default function Register() {
+  const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [bio, setBio] = useState("");
+  const [photo, setPhoto] = useState(null);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
+
+  const CLOUDINARY_URL = import.meta.env.VITE_CLOUDINARY_URL;
+  const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_PRESET;
 
   const validatePassword = (password) => {
     const minLength = 6;
@@ -17,82 +26,142 @@ export default function Register() {
     const hasNumber = /\d/.test(password);
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>_-]/.test(password);
 
-    if (password.length < minLength) {
-      return "La contraseña debe tener al menos 6 caracteres.";
-    }
-    if (!hasUpperCase) {
-      return "La contraseña debe contener al menos una letra mayúscula.";
-    }
-    if (!hasNumber) {
-      return "La contraseña debe contener al menos un número.";
-    }
-    if (!hasSpecialChar) {
-      return "La contraseña debe contener al menos un carácter especial.";
-    }
+    if (password.length < minLength) return "La contraseña debe tener al menos 6 caracteres.";
+    if (!hasUpperCase) return "La contraseña debe contener al menos una letra mayúscula.";
+    if (!hasNumber) return "La contraseña debe contener al menos un número.";
+    if (!hasSpecialChar) return "La contraseña debe contener al menos un carácter especial.";
     return "";
+  };
+
+  const isInstitutionalEmail = (email) => {
+    return email.endsWith("@uninorte.edu.co");
+  };
+
+  const nextStep = () => {
+    if (!name || !email || !password) {
+      setError("Por favor completa todos los campos.");
+      return;
+    }
+    if (!isInstitutionalEmail(email)) {
+      setError("Solo se permite el correo institucional @uninorte.edu.co");
+      return;
+    }
+    const pwdError = validatePassword(password);
+    if (pwdError) {
+      setPasswordError(pwdError);
+      return;
+    }
+    setError("");
+    setPasswordError("");
+    setStep(2);
+  };
+
+  const prevStep = () => setStep(1);
+
+  const uploadToCloudinary = async (file) => {
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+    const res = await fetch(CLOUDINARY_URL, {
+      method: "POST",
+      body: data,
+    });
+    const json = await res.json();
+    if (!json.secure_url) throw new Error("Error al subir imagen a Cloudinary");
+    return json.secure_url;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setPasswordError("");
-
-    const passwordValidationError = validatePassword(password);
-    if (passwordValidationError) {
-      setPasswordError(passwordValidationError);
-      return;
-    }
+    setSuccessMessage("Registrado exitosamente");
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      navigate("/login"); // redirige al login después del registro exitoso
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = userCredential.user.uid;
+
+      let photoURL = "";
+      if (photo) {
+        photoURL = await uploadToCloudinary(photo);
+      }
+
+      await setDoc(doc(db, "usuarios", uid), {
+        uid,
+        email,
+        name,
+        bio,
+        photoURL,
+        createdAt: new Date().toISOString(),
+      });
+
+      setSuccessMessage("Registrado correctamente");
+      navigate("/profile");
     } catch (err) {
       setError(err.message);
     }
   };
 
-  const goToLogin = () => {
-    navigate("/login");
-  };
-
   return (
-    <div className = "register-container">
-      <form onSubmit = {
-          handleSubmit
-      }
-      className = "register-form">
-        <h2 className="register-title">Registro</h2>
-        {error && <p className="error-message">{error}</p>}
-        <input
-          type="email"
-          placeholder="Correo electrónico"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="input-field"
-          required
-        />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="input-field"
-          required
-        />  
-        {passwordError && <p className="error-message">{passwordError}</p>}
-        <button type="submit" className="submit-btn">
-          Registrarse
-        </button>
+    <div className="register-wrapper">
+      <div className="register-card">
+        <div className="register-image-section">
+          <img src="/assets/signup-illustration.png" alt="Registro" />
+        </div>
+        <form onSubmit={handleSubmit} className="register-form">
+          <div className="progress-bar">
+            <div className={`step ${step >= 1 ? 'active' : ''}`}></div>
+            <div className={`step ${step >= 2 ? 'active' : ''}`}></div>
+          </div>
 
-        <button
-        type = "button"
-        onClick = {
-            goToLogin
-        }
-        className = "return-btn" >
-          Volver al Login
-        </button>
-      </form>
+          <h2 className="register-title">Crea tu cuenta</h2>
+          {error && <p className="error-message">{error}</p>}
+          {successMessage && <p className="success-message">{successMessage}</p>}
+
+          {step === 1 && (
+            <div className="form-step animate-step">
+              <label>Nombre Completo</label>
+              <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+
+              <label>Correo institucional</label>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="tucorreo@uninorte.edu.co" />
+
+              <label>Contraseña</label>
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              {passwordError && <p className="error-message">{passwordError}</p>}
+
+              <button type="button" onClick={nextStep} className="submit-btn">Siguiente</button>
+
+              <p className="login-link-text">
+                ¿Ya tienes cuenta?{" "}
+                <span className="login-link" onClick={() => navigate("/login")}>Inicia sesión</span>
+              </p>
+            </div>
+          )}
+
+          {step === 2 && (
+            <div className="form-step animate-step">
+              <label>Biografía</label>
+              <textarea value={bio} onChange={(e) => setBio(e.target.value)} rows="3" />
+
+              <label>Foto de perfil</label>
+              <input type="file" accept="image/*" onChange={(e) => setPhoto(e.target.files[0])} />
+
+              <button type="submit" className="submit-btn">Registrarse</button>
+              <button type="button" onClick={prevStep} className="return-btn">Atrás</button>
+            </div>
+          )}
+        </form>
+        {successMessage && (
+          <div className="success-modal">
+            <img src="/assets/success-icon.png" alt="Éxito" />
+            <h3>¡Registro Exitoso!</h3>
+            <p>Tu cuenta ha sido creada correctamente.</p>
+            <button onClick={() => navigate("/profile")}>Ir al perfil</button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

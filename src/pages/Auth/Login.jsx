@@ -2,12 +2,17 @@ import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../services/firebase";
 import { useNavigate, Link } from "react-router-dom";
-import "./Login.css"; // Asegúrate de que este import esté
+import "./Login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  const isInstitutionalEmail = (email) => {
+    return email.endsWith("@uninorte.edu.co");
+  };
+  
 
   const navigate = useNavigate();
 
@@ -17,6 +22,11 @@ const Login = () => {
 
     if (!email || !password) {
       setError("Por favor completa todos los campos.");
+      return;
+    }
+
+    if (!isInstitutionalEmail(email)) {
+      setError("Solo se permite el correo institucional @uninorte.edu.co");
       return;
     }
 
@@ -35,13 +45,14 @@ const Login = () => {
       }
     }
   };
+  
 
   const goToTodosLosProyectos = () => {
     navigate("/todoslosproyectos");
   };
 
   return (
-      <div className="login-container">
+    <div className="login-container">
       <form onSubmit={handleLogin} className="login-form">
         <div className="form-header">
           <h2 className="login-title">Iniciar Sesión</h2>
@@ -54,10 +65,11 @@ const Login = () => {
             <input
               id="email"
               type="email"
-              className="input-field"
+              className={`input-field ${error.includes("correo") ? "shake" : ""}`}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="ejemplo@correo.com"
+              placeholder = "usuario@uninorte.edu.co"
+
             />
           </div>
           <div className="form-group">
@@ -65,12 +77,14 @@ const Login = () => {
             <input
               id="password"
               type="password"
-              className="input-field"
+              className={`input-field ${error.includes("Contraseña") ? "shake" : ""}`}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
             />
           </div>
+
+          
         </div>
 
         <div className="button-group">
@@ -92,6 +106,12 @@ const Login = () => {
             <Link to="/register" className="link-register">
               Crear una cuenta
             </Link>
+            {/* Enlace para recuperar contraseña */}
+          <div className="forgot-password-link">
+            <Link to="/forgot-password" className="link-forgot-password">
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </div>
           </p>
         </div>
       </form>
@@ -100,6 +120,3 @@ const Login = () => {
 };
 
 export default Login;
-
-// Este componente de inicio de sesión utiliza Firebase Authentication para autenticar a los usuarios.
-// Se utiliza el hook useState para manejar el estado del correo electrónico, la contraseña y los errores.
