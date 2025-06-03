@@ -6,7 +6,8 @@ import {
   doc,
   updateDoc,
   arrayUnion,
-  arrayRemove
+  arrayRemove,
+  addDoc
 } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { db, auth } from "../../services/firebase";
@@ -45,6 +46,18 @@ const TodosLosProyectos = () => {
     return () => unsub();
   }, []);
 
+  const logActivity = async (type, projectId, details = {}) => {
+    if (!user) return;
+    await addDoc(collection(db, "logs"), {
+      userId: user.uid,
+      userEmail: user.email,
+      type,
+      projectId,
+      timestamp: new Date().toISOString(),
+      ...details,
+    });
+  };
+
   const toggleField = async (proj, field) => {
     if (!user) return alert("Debes iniciar sesión.");
     await updateDoc(doc(db, "projects", proj.id), {
@@ -52,6 +65,11 @@ const TodosLosProyectos = () => {
         ? arrayRemove(user.uid)
         : arrayUnion(user.uid),
     });
+    await logActivity(
+      field === "likes" ? "like" : "favorito",
+      proj.id,
+      { title: proj.title }
+    );
   };
 
   const addComment = async proj => {
@@ -66,16 +84,8 @@ const TodosLosProyectos = () => {
     await updateDoc(doc(db, "projects", proj.id), {
       comments: arrayUnion(newCom),
     });
+    await logActivity("comentar", proj.id, { title: proj.title });
     setComment("");
-  };
-
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      navigate("/login");
-    } catch (error) {
-      alert("Error al cerrar sesión: " + error.message);
-    }
   };
 
   const q = search.toLowerCase();
@@ -102,42 +112,16 @@ const TodosLosProyectos = () => {
 
   return (
     <div className="todos-container">
-      {/* HERO */}
       <section className="hero">
         <h1>Mi OpenLab</h1>
         <p>Explora proyectos públicos o comparte los tuyos con la comunidad.</p>
 
         <div className="hero-buttons">
-          {!user && (
-            <>
-              <button className="btn-primary" onClick={() => navigate("/register")}>
-                Regístrate
-              </button>
-              <button className="login-link" onClick={() => navigate("/login")}>
-                Iniciar sesión
-              </button>
-            </>
-          )}
-
-          {user && (
-            <div className="profile-info">
-              <p className="welcome-msg">Bienvenido, <strong>{user.email}</strong></p>
-              <button className="btn-primary" onClick={() => navigate("/profile")}>
-                Ir a tu perfil
-              </button>
-              <button
-                className="btn-logout"
-                onClick={handleLogout}
-                style={{ marginTop: "0.5rem", backgroundColor: "#e63946", color: "#fff" }}
-              >
-                Cerrar sesión
-              </button>
-            </div>
-          )}
+          <button className="btn-primary" onClick={() => navigate("/register")}>Regístrate</button>
         </div>
+        <button className="login-link" onClick={() => navigate("/login")}>Iniciar sesión</button>
       </section>
 
-      {/* Búsqueda */}
       <div className="search-bar">
         <input
           type="search"
@@ -147,7 +131,6 @@ const TodosLosProyectos = () => {
         />
       </div>
 
-      {/* Filtro de categoría */}
       <div className="filter-bar">
         <select value={category} onChange={e => setCategory(e.target.value)}>
           <option value="Todas">Todas las categorías</option>
@@ -157,7 +140,6 @@ const TodosLosProyectos = () => {
         </select>
       </div>
 
-      {/* Lista */}
       <section id="lista-proyectos">
         <h2 className="todos-title">Proyectos públicos</h2>
         {visible.length === 0 && <p>No hay proyectos que coincidan.</p>}
@@ -178,19 +160,16 @@ const TodosLosProyectos = () => {
                   <button
                     title="Like"
                     onClick={() => toggleField(p, "likes")}
-                  >
+                    style={{ color: liked ? "red" : "gray" }}>
                     ❤️ {p.likes?.length || 0}
                   </button>
                   <button
                     title="Favorito"
                     onClick={() => toggleField(p, "favorites")}
-                  >
+                    style={{ color: fav ? "gold" : "gray" }}>
                     ⭐ {p.favorites?.length || 0}
                   </button>
-                  <button
-                    title="Comentarios"
-                    onClick={() => setOpenId(open ? null : p.id)}
-                  >
+                  <button title="Comentarios" onClick={() => setOpenId(open ? null : p.id)}>
                     💬 {p.comments?.length || 0}
                   </button>
                 </div>
@@ -216,9 +195,7 @@ const TodosLosProyectos = () => {
                   </div>
                 )}
 
-                <Link to={`/proyecto/${p.id}`} className="mas-info">
-                  Más información
-                </Link>
+                <Link to={`/proyecto/${p.id}`} className="mas-info">Más información</Link>
               </div>
             );
           })}

@@ -7,9 +7,7 @@ import {
   where,
   getDocs,
   updateDoc,
-  addDoc,
-  onSnapshot,
-  serverTimestamp
+  addDoc
 } from "firebase/firestore";
 import { auth, db } from "../../services/firebase";
 import { useNavigate } from "react-router-dom";
@@ -29,6 +27,7 @@ export default function UserProfile() {
   const [editedProject, setEditedProject] = useState({});
   const [likesCount, setLikesCount] = useState(0);
   const [lastActivity, setLastActivity] = useState(null);
+  const [userLogs, setUserLogs] = useState([]);
 
   const navigate = useNavigate();
 
@@ -52,8 +51,9 @@ export default function UserProfile() {
 
       const q = query(collection(db, "projects"), where("uid", "==", user.uid));
       const projectSnap = await getDocs(q);
-      const projects = projectSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setUserProjects(projects);
+      const projects = projectSnap.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .filter(p => !("deleted" in p) || p.deleted === false);
 
       let totalLikes = 0;
       let latest = null;
@@ -67,8 +67,19 @@ export default function UserProfile() {
         }
       });
 
+      setUserProjects(projects);
       setLikesCount(totalLikes);
       setLastActivity(latest);
+
+      const logQuery = query(
+        collection(db, "logs"),
+        where("userId", "==", user.uid)
+      );
+      const logSnap = await getDocs(logQuery);
+      const logs = logSnap.docs
+        .map(d => d.data())
+        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      setUserLogs(logs);
 
       setLoading(false);
     };
@@ -147,18 +158,6 @@ export default function UserProfile() {
     setUserProjects(prev => prev.filter(p => p.id !== id));
   };
 
-  const handleLogCreation = async (projectId) => {
-    await logActivity("crear", projectId);
-  };
-
-  const handleLogLike = async (projectId) => {
-    await logActivity("like", projectId);
-  };
-
-  const handleLogComment = async (projectId, commentText) => {
-    await logActivity("comentario", projectId, { comment: commentText });
-  };
-
   if (loading) return <div className="user-profile-loading">Cargando perfil...</div>;
   if (!userData) return <div className="user-profile-error">No se encontraron datos del usuario.</div>;
 
@@ -171,6 +170,8 @@ export default function UserProfile() {
         <ul>
           <li onClick={() => setActiveTab("perfil")} className={activeTab === "perfil" ? "active" : ""}>Mi perfil</li>
           <li onClick={() => setActiveTab("proyectos")} className={activeTab === "proyectos" ? "active" : ""}>Mis proyectos</li>
+          <li onClick={() => setActiveTab("actividad")} className={activeTab === "actividad" ? "active" : ""}>Actividad</li>
+
         </ul>
       </div>
 
@@ -281,6 +282,31 @@ export default function UserProfile() {
             )}
           </>
         )}
+        {activeTab === "actividad" && (
+  <>
+    <h2 className="dashboard-title">Actividad reciente</h2>
+    <div className="activity-timeline">
+      {userLogs.length === 0 ? (
+        <p>No hay registros de actividad.</p>
+      ) : (
+        <ul>
+          {userLogs.map((log, index) => (
+            <li key={index} className="timeline-entry">
+              <span className="timestamp">
+                {new Date(log.timestamp).toLocaleString()}
+              </span>
+              <span className="action">
+                <strong>{log.type.toUpperCase()}</strong>
+                {log.title && ` - ${log.title}`}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </>
+)}
+
       </div>
     </div>
   );
