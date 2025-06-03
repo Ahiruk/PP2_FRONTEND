@@ -10,6 +10,7 @@ import MasInformacion from "../src/pages/Explore/MasInformacion";
 // Páginas privadas
 import Profile from "../src/pages/Profile/Profile";
 import NewProject from "../src/pages/Profile/NewProject";
+import UserProfile from "../src/pages/Profile/UserProfile";
 
 // Componentes
 import PrivateRoute from "../src/components/PrivateRoute";
@@ -25,7 +26,7 @@ function App() {
         <Route path="/" element={<TodosLosProyectos />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} /> {/* 🆕 */}
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/todoslosproyectos" element={<TodosLosProyectos />} />
         <Route path="/proyecto/:id" element={<MasInformacion />} />
 
@@ -38,6 +39,15 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route
+  path="/profile/view"
+  element={
+    <PrivateRoute>
+      <UserProfile />
+    </PrivateRoute>
+  }
+/>
+
         <Route
           path="/profile/new"
           element={
