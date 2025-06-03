@@ -21,7 +21,32 @@ import PerfilPublico from "../src/pages/Profile/PerfilPublico"; // 🆕
 import PrivateRoute from "../src/components/PrivateRoute";
 import ThemeToggle from "../src/components/ThemeToggle";
 
+import FloatingMenu from "./components/FloatingMenu";
+import { User, FileText, LogOut } from "lucide-react";
+import { signOut } from "firebase/auth";
+import { auth } from "./services/firebase";        // ← 1)  trae auth
+import { useNavigate } from "react-router-dom";
+
+
 function App() {
+
+  const navigate = useNavigate();          // ← 3)  crea navigate
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);                 // auth ya existe
+      navigate("/login");                  // ahora también navigate
+    } catch (error) {
+      alert("Error al cerrar sesión: " + error.message);
+    }
+  };
+
+  const menuItems = [
+    { icon: User, label: "Perfil", to: "/profile/view" },
+    { icon: FileText, label: "CV", to: "/profile/cv" },
+    { icon: LogOut, label: "Salir", onClick: handleLogout }, // ← aquí
+  ];
+
   return (
     <>
       <ThemeToggle />
@@ -46,23 +71,23 @@ function App() {
           }
         />
         <Route
-  path="/profile/view"
-  element={
-    <PrivateRoute>
-      <UserProfile />
-    </PrivateRoute>
-  }
-/>
-<Route
-  path="/profile/cv"
-  element={
-    <PrivateRoute>
-      <PerfilProfesional />
-    </PrivateRoute>
-  }
-/>
+          path="/profile/view"
+          element={
+            <PrivateRoute>
+              <UserProfile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile/cv"
+          element={
+            <PrivateRoute>
+              <PerfilProfesional />
+            </PrivateRoute>
+          }
+        />
 
-<Route path="/profile/:uid" element={<PerfilPublico />} />
+        <Route path="/profile/:uid" element={<PerfilPublico />} />
 
 
         <Route
@@ -90,6 +115,7 @@ function App() {
           }
         />
       </Routes>
+      <FloatingMenu items={menuItems} />
     </>
   );
 }

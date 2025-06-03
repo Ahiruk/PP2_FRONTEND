@@ -1,0 +1,93 @@
+/* ——————————————————————————————
+   CONTENEDOR GLOBAL
+   —————————————————————————————— */
+.fab-wrapper{
+  position:fixed;
+  bottom:1.5rem;
+  right:1.5rem;
+  z-index:9999;
+}
+
+/* ——————————————————————————————
+   BOTÓN PRINCIPAL (círculo)
+   —————————————————————————————— */
+.fab-main{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  background:var(--primary-color);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:none;
+  box-shadow:0 4px 8px rgba(0,0,0,.25);
+  cursor:pointer;
+  transition:transform .2s, box-shadow .2s;
+}
+.fab-main:hover{
+  transform:scale(1.05);
+  box-shadow:0 6px 12px rgba(0,0,0,.3);
+}
+
+/* ——————————————————————————————
+   LISTA DE ITEMS
+   —————————————————————————————— */
+.fab-items{
+  list-style:none;
+  padding:0;
+  margin:0;
+  position:absolute;
+  bottom:70px;          /* separa del botón principal */
+  right:0;
+  display:flex;
+  flex-direction:column;
+  gap:0.75rem;
+  pointer-events:none;  /* desactivado cuando está cerrado */
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity .25s, transform .25s;
+}
+.fab-items.open{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+
+/* ——————————————————————————————
+   ITEM INDIVIDUAL (botón pequeño)
+   —————————————————————————————— */
+.fab-link{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  background:var(--accent-color);
+  color:var(--text-color);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:none;
+  text-decoration:none;
+  box-shadow:0 3px 6px rgba(0,0,0,.2);
+  transition:background .2s, transform .2s;
+}
+.fab-link:hover{
+  background:var(--primary-color);
+  color:#fff;
+  transform:translateY(-2px);
+}
+
+/* ——————————————————————————————
+   MODO OSCURO – mismas variables
+   —————————————————————————————— */
+body.dark .fab-link{
+  background:#2e2e42;
+  color:#e5e7eb;
+}
+body.dark .fab-link:hover{
+  background:var(--primary-color);
+  color:#fff;
+}
+body.dark .fab-main{
+  background:var(--primary-color);
+}
