@@ -233,3 +233,41 @@
   font-size: 1.8rem;
   color: var(--primary-color);
 }
+
+
+/* Miniatura */
+.card-img{
+  width:100%;
+  max-height:150px;
+  object-fit:cover;
+  border-radius:6px;
+  margin-bottom:8px;
+}
+
+/* Botones de acciones */
+.card-actions{
+  display:flex;
+  gap:12px;
+  margin:6px 0 10px;
+}
+.card-actions button{
+  background:none;
+  border:none;
+  font-size:1rem;
+  cursor:pointer;
+}
+
+/* Panel de comentarios */
+.card-comments{
+  margin-top:8px;
+}
+.card-comments textarea{
+  width:100%;
+  border-radius:4px;
+  resize:vertical;
+  margin:4px 0;
+}
+
+/* Texto autor y enlace */
+.autor  { font-size:.85rem; color:#444; margin-bottom:4px; }
+.mas-info{ display:inline-block; margin-top:6px; }
