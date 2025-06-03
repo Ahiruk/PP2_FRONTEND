@@ -1,3 +1,7 @@
+// generate-readme.js
+const fs = require("fs");
+
+const content = `
 # PP2_FRONTEND
 
 _Empower Your Projects, Connect with Your Community_
@@ -18,3 +22,8 @@ _Built with the tools and technologies:_
 ![React](https://img.shields.io/badge/React-blue?style=for-the-badge&logo=react)
 ![Vite](https://img.shields.io/badge/Vite-purple?style=for-the-badge&logo=vite)
 ![ESLint](https://img.shields.io/badge/ESLint-indigo?style=for-the-badge&logo=eslint)
+
+`;
+
+fs.writeFileSync("README.md", content.trim());
+console.log("✅ README.md generado con éxito.");
