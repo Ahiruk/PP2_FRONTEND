@@ -116,39 +116,68 @@ const PerfilPublico = () => {
 
       {/* Lista de seguidos y seguidores */}
       <div className="perfil-publico-section">
-        <h3>👥 Seguidores y Seguidos</h3>
-        <div className="seguidores-listas">
-          <div>
-            <strong>Siguiendo:</strong>
-            {seguidosData.length > 0 ? (
-              <ul className="perfil-publico-list">
-                {seguidosData.map((u) => (
-                  <li key={u.id}>
-                    <Link to={`/profile/${u.id}`}>{u.name || u.nombre || "Usuario"}</Link>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No sigue a nadie aún.</p>
-            )}
-          </div>
+  <h3>👥 Seguidores y Seguidos</h3>
+  <div className="seguidores-listas">
+    <div>
+      <strong>Siguiendo:</strong>
+      {seguidosData.length > 0 ? (
+        <ul className="perfil-publico-list imagen-nombre-lista">
+          {seguidosData.map((u) => (
+            <li key={u.id}>
+            <Link
+  to={`/perfil/${u.id}`}
+  className="usuario-item-link"
+  title={u.email || "Correo no disponible"}
+>
+  {u.photoURL && (
+    <img
+      src={u.photoURL}
+      alt="Foto"
+      className="mini-avatar"
+    />
+  )}
+  <span>{u.name || u.nombre || "Usuario"}</span>
+</Link>
 
-          <div>
-            <strong>Seguidores:</strong>
-            {seguidoresData.length > 0 ? (
-              <ul className="perfil-publico-list">
-                {seguidoresData.map((u) => (
-                  <li key={u.id}>
-                    <Link to={`/profile/${u.id}`}>{u.name || u.nombre || "Usuario"}</Link>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>Aún no tiene seguidores.</p>
-            )}
-          </div>
-        </div>
-      </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No sigue a nadie aún.</p>
+      )}
+    </div>
+
+    <div>
+      <strong>Seguidores:</strong>
+      {seguidoresData.length > 0 ? (
+        <ul className="perfil-publico-list imagen-nombre-lista">
+          {seguidoresData.map((u) => (
+            <li key={u.id}>
+            <Link
+  to={`/perfil/${u.id}`}
+  className="usuario-item-link"
+  title={u.email || "Correo no disponible"}
+>
+  {u.photoURL && (
+    <img
+      src={u.photoURL}
+      alt="Foto"
+      className="mini-avatar"
+    />
+  )}
+  <span>{u.name || u.nombre || "Usuario"}</span>
+</Link>
+
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>Aún no tiene seguidores.</p>
+      )}
+    </div>
+  </div>
+</div>
+
 
       {[ 
         { label: "🎓 Educación", data: perfil.educacion },

@@ -111,3 +111,28 @@
     font-size: 1.4rem;
   }
 }
+
+.imagen-nombre-lista {
+  padding-left: 0;
+  list-style: none;
+}
+
+.usuario-item-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.usuario-item-link:hover {
+  text-decoration: underline;
+}
+
+.mini-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #ccc;
+}
