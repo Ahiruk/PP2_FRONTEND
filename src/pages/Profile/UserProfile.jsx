@@ -7,7 +7,8 @@ import {
   where,
   getDocs,
   updateDoc,
-  addDoc
+  addDoc,
+  onSnapshot
 } from "firebase/firestore";
 import { auth, db } from "../../services/firebase";
 import { useNavigate } from "react-router-dom";
@@ -35,10 +36,10 @@ export default function UserProfile() {
   const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_PRESET;
 
   useEffect(() => {
-    const fetchData = async () => {
-      const user = auth.currentUser;
-      if (!user) return;
+    const user = auth.currentUser;
+    if (!user) return;
 
+    const unsub = onSnapshot(collection(db, "projects"), async (snap) => {
       const userRef = doc(db, "usuarios", user.uid);
       const userSnap = await getDoc(userRef);
       if (userSnap.exists()) {
@@ -49,16 +50,13 @@ export default function UserProfile() {
         setPreviewPhoto(data.photoURL);
       }
 
-      const q = query(collection(db, "projects"), where("uid", "==", user.uid));
-      const projectSnap = await getDocs(q);
-      const projects = projectSnap.docs
-        .map(doc => ({ id: doc.id, ...doc.data() }))
-        .filter(p => !("deleted" in p) || p.deleted === false);
+      const all = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      const filtered = all.filter(p => p.uid === user.uid && (!p.deleted || p.deleted === false));
 
       let totalLikes = 0;
       let latest = null;
 
-      projects.forEach(proj => {
+      filtered.forEach(proj => {
         if (Array.isArray(proj.likes)) {
           totalLikes += proj.likes.length;
         }
@@ -67,7 +65,7 @@ export default function UserProfile() {
         }
       });
 
-      setUserProjects(projects);
+      setUserProjects(filtered);
       setLikesCount(totalLikes);
       setLastActivity(latest);
 
@@ -82,8 +80,9 @@ export default function UserProfile() {
       setUserLogs(logs);
 
       setLoading(false);
-    };
-    fetchData();
+    });
+
+    return () => unsub();
   }, []);
 
   const logActivity = async (type, projectId, details = {}) => {
