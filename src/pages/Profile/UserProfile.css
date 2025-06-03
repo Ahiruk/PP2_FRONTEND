@@ -315,3 +315,132 @@
 .timeline-entry .action {
     font-size: 1em;
 }
+
+/* Modo oscuro global */
+.dark {
+    background-color: #111827;
+    color: #f9fafb;
+}
+
+/* Sidebar oscuro */
+.dark .sidebar {
+    background-color: #1f2937;
+    border-color: #374151;
+}
+
+.dark .sidebar li {
+    color: #e5e7eb;
+}
+
+.dark .sidebar li.active,
+.dark .sidebar li:hover {
+    background-color: #2563eb;
+    color: #ffffff;
+}
+
+/* Contenido principal oscuro */
+.dark .dashboard-content {
+    background-color: #1e293b;
+}
+
+/* Tarjeta de perfil en modo oscuro */
+.dark .profile-card {
+    background-color: #1f2937;
+    box-shadow: none;
+}
+
+.dark .profile-info input,
+.dark .profile-info textarea,
+.dark .edit-form input,
+.dark .edit-form textarea,
+.dark .edit-form select {
+    background-color: #374151;
+    color: #f9fafb;
+    border-color: #4b5563;
+}
+
+/* Botones */
+.dark .edit-btn,
+.dark .btn-new,
+.dark .btn-save {
+    background-color: #3b82f6;
+}
+
+.dark .edit-btn:hover,
+.dark .btn-new:hover,
+.dark .btn-save:hover {
+    background-color: #2563eb;
+}
+
+.dark .btn-cancel {
+    background-color: #6b7280;
+}
+
+.dark .btn-cancel:hover {
+    background-color: #4b5563;
+}
+
+/* Proyectos */
+.dark .project-card {
+    background-color: #1f2937;
+    box-shadow: none;
+}
+
+.dark .project-card h4 {
+    color: #f9fafb;
+}
+
+.dark .project-card p {
+    color: #d1d5db;
+}
+
+/* Modal oscuro */
+.dark .edit-form {
+    background-color: #1f2937;
+    color: #f9fafb;
+}
+
+/* Línea de tiempo */
+.dark .timeline-entry {
+    border-left-color: #4b5563;
+}
+
+.dark .timeline-entry .timestamp {
+    color: #9ca3af;
+}
+
+.dark .timeline-entry .action {
+    color: #e5e7eb;
+}
+
+.dark .user-dashboard {
+    color: #f9fafb;
+}
+
+.dark .sidebar li {
+    color: #e5e7eb;
+}
+
+.dark .sidebar li.active,
+.dark .sidebar li:hover {
+    color: #ffffff;
+}
+
+.dark .project-card h4 {
+    color: #f9fafb;
+}
+
+.dark .project-card p {
+    color: #d1d5db;
+}
+
+.dark .profile-info label,
+.dark .edit-form label,
+.dark .edit-form h3,
+.dark .profile-info p {
+    color: #f9fafb;
+}
+
+.dark .edit-form {
+    color: #f9fafb;
+}
