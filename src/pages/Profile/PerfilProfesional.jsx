@@ -1,8 +1,8 @@
 // src/pages/PerfilProfesional.jsx
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { db } from "../../services/firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useAuth } from "../../hooks/useAuth";
 import "./PerfilProfesional.css";
 
@@ -10,8 +10,6 @@ const PerfilProfesional = () => {
   const { user } = useAuth();
 
   const [formData, setFormData] = useState({
-    nombre: "",
-    biografia: "",
     educacion: [""],
     experiencia: [""],
     habilidades: [""],
@@ -20,6 +18,34 @@ const PerfilProfesional = () => {
     github: "",
     twitter: "",
   });
+
+  useEffect(() => {
+    const cargarPerfilExistente = async () => {
+      try {
+        const ref = doc(db, "usuarios", user.uid);
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+          const datos = snap.data();
+          setFormData({
+            educacion: datos.educacion || [""],
+            experiencia: datos.experiencia || [""],
+            habilidades: datos.habilidades || [""],
+            tecnologias: datos.tecnologias || [""],
+            linkedin: datos.linkedin || "",
+            github: datos.github || "",
+            twitter: datos.twitter || "",
+          });
+        }
+      } catch (err) {
+        console.error("Error al cargar datos existentes:", err);
+      }
+    };
+  
+    if (user?.uid) {
+      cargarPerfilExistente();
+    }
+  }, [user]);
+  
 
   const handleChange = (e, field, index = null) => {
     if (index !== null) {
@@ -38,7 +64,7 @@ const PerfilProfesional = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await setDoc(doc(db, "perfilesProfesionales", user.uid), formData);
+      await setDoc(doc(db, "usuarios", user.uid), formData, { merge: true });
       alert("Perfil guardado exitosamente");
     } catch (error) {
       console.error("Error al guardar perfil:", error);
@@ -49,20 +75,6 @@ const PerfilProfesional = () => {
     <div className="perfil-container">
       <h2>Formulario de Portafolio Profesional</h2>
       <form onSubmit={handleSubmit}>
-        <label>Nombre completo:</label>
-        <input
-          type="text"
-          value={formData.nombre}
-          onChange={(e) => handleChange(e, "nombre")}
-          required
-        />
-
-        <label>Biografía:</label>
-        <textarea
-          value={formData.biografia}
-          onChange={(e) => handleChange(e, "biografia")}
-          required
-        />
 
         <label>Educación:</label>
         {formData.educacion.map((edu, i) => (
