@@ -1,11 +1,11 @@
-/* PerfilPublico.css */
-
 .perfil-publico-container {
   max-width: 960px;
   margin: 0 auto;
   padding: 2rem;
-  background-color: #f0f4fc;
+  background-color: var(--background-color);
   font-family: "Segoe UI", sans-serif;
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .perfil-header {
@@ -13,7 +13,7 @@
   flex-direction: column;
   align-items: center;
   margin-bottom: 2rem;
-  background: #fff;
+  background: var(--accent-color);
   border-radius: 16px;
   padding: 1rem;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
@@ -24,24 +24,24 @@
   height: 120px;
   object-fit: cover;
   border-radius: 50%;
-  border: 3px solid #ddd;
+  border: 3px solid var(--secondary-color);
   margin-bottom: 1rem;
 }
 
 .perfil-publico-container h2 {
   font-size: 1.8rem;
   margin: 0.25rem 0;
-  color: #222;
+  color: var(--primary-color);
 }
 
 .perfil-publico-container p {
-  color: #555;
+  color: var(--text-color);
   text-align: center;
   max-width: 700px;
 }
 
 .btn-follow {
-  background-color: #2563eb;
+  background-color: var(--primary-color);
   color: white;
   padding: 0.4rem 1.2rem;
   border: none;
@@ -52,38 +52,48 @@
 }
 
 .btn-follow:hover {
-  background-color: #1d4ed8;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
 }
 
 .perfil-publico-section {
-  background: white;
+  background: var(--accent-color);
   margin: 1.5rem 0;
   padding: 1.25rem 1.5rem;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: background 0.3s ease;
 }
 
 .perfil-publico-section h3 {
   font-size: 1.2rem;
   margin-bottom: 0.75rem;
-  border-left: 4px solid #2563eb;
+  border-left: 4px solid var(--primary-color);
   padding-left: 0.75rem;
-  color: #333;
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.perfil-publico-section h3::before {
+  content: '\1F465';
+  /* 👥 */
 }
 
 .perfil-publico-list {
   list-style: none;
   padding-left: 0;
-  color: #444;
+  color: var(--text-color);
 }
 
 .perfil-publico-list li {
   padding: 0.4rem 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #ccc;
 }
 
 .perfil-publico-links a {
-  color: #0077b5;
+  color: #61dafb;
   text-decoration: none;
   margin-right: 1rem;
   font-weight: 500;
@@ -91,6 +101,37 @@
 
 .perfil-publico-links a:hover {
   text-decoration: underline;
+}
+
+/* Seguidores/seguidos (imagen mini avatar redondo) */
+.imagen-nombre-lista {
+  padding-left: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.usuario-item-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.usuario-item-link:hover {
+  text-decoration: underline;
+}
+
+.mini-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--secondary-color);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 @media screen and (max-width: 600px) {
@@ -110,29 +151,4 @@
   .perfil-publico-container h2 {
     font-size: 1.4rem;
   }
-}
-
-.imagen-nombre-lista {
-  padding-left: 0;
-  list-style: none;
-}
-
-.usuario-item-link {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
-  color: inherit;
-}
-
-.usuario-item-link:hover {
-  text-decoration: underline;
-}
-
-.mini-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 1px solid #ccc;
 }
