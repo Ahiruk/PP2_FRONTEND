@@ -7,6 +7,10 @@ import ForgotPassword from "../src/pages/Auth/ForgotPassword"; // 🆕
 import TodosLosProyectos from "../src/pages/Explore/TodosLosProyectos";
 import MasInformacion from "../src/pages/Explore/MasInformacion";
 
+// Páginas de Comunidades (solo se importa una vez cada uno)
+import Comunidades from "./pages/Explore/Comunidades";
+import CrearComunidad from "./pages/ProjectView/CrearComunidad";
+
 // Páginas privadas
 import Profile from "../src/pages/Profile/Profile";
 import NewProject from "../src/pages/Profile/NewProject";
@@ -15,8 +19,6 @@ import ProyectoDetalle from "../src/pages/ProjectView/ProyectoDetalle";
 import EditarPerfil from "../src/pages/Profile/EditarPerfil";
 import PerfilProfesional from "../src/pages/Profile/PerfilProfesional"; // 🆕
 import PerfilPublico from "../src/pages/Profile/PerfilPublico"; // 🆕
-import Comunidades from "../src/pages/Explore/Comunidades"; // 🆕
-import CrearComunidad from "../src/pages/ProjectView/CrearComunidad";
 
 
 // Componentes
@@ -24,10 +26,12 @@ import PrivateRoute from "../src/components/PrivateRoute";
 import ThemeToggle from "../src/components/ThemeToggle";
 
 import FloatingMenu from "./components/FloatingMenu";
-import { User, FileText, LogOut } from "lucide-react";
+import { Grid, User, FileText, LogOut ,  Users } from "lucide-react";
 import { signOut } from "firebase/auth";
 import { auth } from "./services/firebase";        // ← 1)  trae auth
 import { useNavigate } from "react-router-dom";
+
+
 
 
 function App() {
@@ -44,8 +48,10 @@ function App() {
   };
 
   const menuItems = [
+    { icon: Grid,     label: "Proyectos",        to: "/todoslosproyectos" }, 
     { icon: User, label: "Perfil", to: "/profile/view" },
     { icon: FileText, label: "CV", to: "/profile/cv" },
+    { icon: Users,    label: "Comunidades",  to: "/comunidades" },
     { icon: LogOut, label: "Salir", onClick: handleLogout }, // ← aquí
   ];
 
@@ -62,6 +68,13 @@ function App() {
         <Route path="/todoslosproyectos" element={<TodosLosProyectos />} />
         <Route path="/explore" element={<TodosLosProyectos />} />
         <Route path="/proyecto/:id" element={<MasInformacion />} />
+
+
+
+
+        {/* Rutas de Comunidades */}
+        <Route path="/comunidades" element={<Comunidades />} />
+        <Route path="/crearcomunidad" element={<CrearComunidad />} />
 
         {/* 🔒 Rutas Privadas */}
         <Route
@@ -90,7 +103,6 @@ function App() {
         />
 
         <Route path="/profile/:uid" element={<PerfilPublico />} />
-
 
         <Route
           path="/profile/new"
