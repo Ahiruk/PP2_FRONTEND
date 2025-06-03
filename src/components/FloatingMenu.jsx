@@ -25,12 +25,13 @@ export default function FloatingMenu({ items }) {
             {to ? (
               <Link to={to} className="fab-link" title={label} onClick={() => setOpen(false)}>
                 <Icon size={20} />
-                <span className="fab-tooltip">{label}</span>   {/* ← tooltip */}
+                <span className="fab-tooltip">{label}</span> 
               </Link>
 
             ) : (
               <button className="fab-link" title={label} onClick={() => { onClick?.(); setOpen(false); }}>
                 <Icon size={20} />
+                <span className="fab-tooltip">{label}</span>
               </button>
             )}
           </li>
