@@ -10,6 +10,8 @@ import MasInformacion from "../src/pages/Explore/MasInformacion";
 // Páginas privadas
 import Profile from "../src/pages/Profile/Profile";
 import NewProject from "../src/pages/Profile/NewProject";
+import UserProfile from "../src/pages/Profile/UserProfile";
+import ProyectoDetalle from "../src/pages/ProjectView/ProyectoDetalle";
 
 // Componentes
 import PrivateRoute from "../src/components/PrivateRoute";
