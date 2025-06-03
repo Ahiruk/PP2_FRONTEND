@@ -42,6 +42,7 @@
    - Border cambia a --primary-color en focus
    ---------------------------------------------------- */
 .project-form input[type="text"],
+.project-form input[type="url"],
 .project-form textarea {
   width: 100%;
   padding: 0.75rem;
@@ -168,3 +169,93 @@ body.dark .project-form .btn-secondary {
   border-radius:0.7rem;
   font-size:0.85rem;
 }
+
+/* ----------------------------------------------------
+   Selects (Tipo, Tecnología, Tema, Visibilidad)
+   – Mismo look & feel que los inputs de texto
+   ---------------------------------------------------- */
+.project-form select{
+  width:100%;
+  padding:0.75rem;
+  border:1px solid #ccc;        /* como los inputs */
+  border-radius:0.5rem;
+  font-size:1rem;
+  background:#fff;
+  color:var(--text-color);
+  transition:border-color .2s;
+}
+
+.project-form select:focus{
+  outline:none;
+  border-color:var(--primary-color);
+}
+
+/* Grid de 4 columnas (Tipo, Tecnología, Tema, Visibilidad) */
+.form-row4{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(10px,7fr));
+  gap:0rem;
+}
+
+
+/* ----------------------------------------------------
+   Modo oscuro: mismos colores que inputs/textarea
+   ---------------------------------------------------- */
+body.dark .project-form select{
+  background:#2e2e42;
+  border:1px solid #444;
+  color:var(--text-color);
+}
+
+
+/* ---------- Upload estilizado ---------- */
+.image-uploader{
+  position:relative;
+  padding:1.5rem;
+  border:2px dashed var(--accent-color);
+  border-radius:0.75rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:border-color .2s, background .2s;
+}
+.image-uploader:hover{
+  border-color:var(--primary-color);
+  background:rgba(0,0,0,.03);
+}
+
+.placeholder{
+  text-align:center;
+  color:var(--text-color);
+}
+.placeholder span{
+  font-size:2rem;
+  display:block;
+  margin-bottom:.4rem;
+}
+
+/* preview */
+.image-preview{
+  width:100%;
+  max-height:220px;
+  object-fit:cover;
+  border-radius:0.5rem;
+  box-shadow:0 4px 8px rgba(0,0,0,.15);
+}
+.change-text{
+  position:absolute;
+  bottom:8px; right:12px;
+  background:rgba(0,0,0,.6);
+  color:#fff;
+  padding:2px 6px;
+  border-radius:4px;
+  font-size:.75rem;
+}
+
+/* Modo oscuro */
+body.dark .image-uploader{
+  border-color:#555;
+  background:#2e2e42a9;
+}
+
