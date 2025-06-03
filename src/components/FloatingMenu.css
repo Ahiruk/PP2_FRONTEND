@@ -25,7 +25,9 @@
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
+
 .fab-main:hover {
+  color: #2e2e42;
   transform: scale(1.1);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
 }
@@ -48,6 +50,7 @@
   transform: translateY(20px);
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
+
 .fab-items.open {
   opacity: 1;
   transform: translateY(0);
@@ -72,6 +75,7 @@
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
   transition: background 0.2s, transform 0.2s;
 }
+
 .fab-link:hover {
   background: var(--primary-color);
   color: #fff;
@@ -92,12 +96,15 @@
   padding: 6px 10px;
   border-radius: 6px;
   font-size: 0.75rem;
+  /* Quitar negrita: font-weight normal */
+  font-weight: 400;
   white-space: nowrap;
   pointer-events: none;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   transition: opacity 0.15s ease, transform 0.15s ease;
   z-index: 1000;
 }
+
 .fab-tooltip::after {
   content: "";
   position: absolute;
@@ -108,6 +115,7 @@
   border-style: solid;
   border-color: transparent transparent transparent #ffffff;
 }
+
 .fab-link:hover .fab-tooltip {
   opacity: 1;
   transform: translateY(-50%) translateX(-8px);
@@ -120,27 +128,37 @@ body.dark .fab-link {
   background: #2e2e42;
   color: #e5e7eb;
 }
+
 body.dark .fab-link:hover {
   background: var(--primary-color);
   color: #2e2e42;
 }
+
 body.dark .fab-main {
   background: var(--primary-color);
 }
+
 body.dark .fab-tooltip {
   background: #2e2e42;
   color: #ebe5e5;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
+
 body.dark .fab-tooltip::after {
   border-color: transparent transparent transparent #2e2e42;
 }
+
 /* ----- modo oscuro del botoncito ese principal que despliega todos los menus----- */
 body.dark .fab-main {
-  background: #2e2e42;       /* color de fondo en oscuro */
-  color: #fff;               /* icono en blanco */
+  background: #2e2e42;
+  /* color de fondo en oscuro */
+  color: #fff;
+  /* icono en blanco */
 }
+
 body.dark .fab-main:hover {
-  background: #fff;       /* color de fondo al hover en oscuro */
-  color: #2e2e42;               /* icono en blanco al hover */
+  background: #fff;
+  /* color de fondo al hover en oscuro */
+  color: #2e2e42;
+  /* icono en blanco al hover */
 }
