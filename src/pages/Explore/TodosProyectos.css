@@ -455,8 +455,8 @@ body.dark .siguiendo-label {
 }
 
 .logro-badge:hover {
-  background-color: var(--secondary-color);
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
 }
 
 body.dark .ranking-card {
@@ -466,11 +466,18 @@ body.dark .ranking-card {
 
 body.dark .logro-badge {
   background-color: #3b3b4f;
-  color: var(--secondary-color);
+  color: white;
   border-color: var(--primary-color);
 }
 
 body.dark .logro-badge:hover {
+  background-color: white;
+  color: #3b3b4f;
+}
+body.dark .ranking-position {
   background-color: var(--primary-color);
-  color: white;
+  color:   #3b3b4f;
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+
 }
