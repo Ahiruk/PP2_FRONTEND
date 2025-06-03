@@ -1,15 +1,17 @@
 <h1> Parcial Frontend</h1>
 
-<h2>Despliegue en Vercel: https://openlabpp2.vercel.app/</h2>
 
 <p align="center"><i>
 Empower Your Projects, Connect with Your Community
 </i></p>
 
+<p align="center">
+  <img src="https://img.shields.io/github/last-commit/Ahiruk/PP2_FRONTEND?style=flat-square" />
+  <img src="https://img.shields.io/github/languages/top/Ahiruk/PP2_FRONTEND?style=flat-square" />
+  <img src="https://img.shields.io/github/languages/count/Ahiruk/PP2_FRONTEND?style=flat-square" />
+</p>
 
-![last commit](https://img.shields.io/github/last-commit/tuusuario/PP2_FRONTEND?style=flat-square)
-![javascript](https://img.shields.io/badge/javascript-57.4%25-blue?style=flat-square)
-![languages](https://img.shields.io/github/languages/count/tuusuario/PP2_FRONTEND?style=flat-square)
+
 
 <p align="center"><i>
 Built with the tools and technologies:
@@ -33,7 +35,10 @@ Built with the tools and technologies:
 
 <p align="center">Una plataforma web para gestionar y explorar proyectos de forma privada y colaborativa.</p>
 
----
+<h2 align="center">
+  🔗 <a href="https://openlabpp2.vercel.app/">Visita My OpenLab en Vercel</a>
+</h2>
+
 <h2 align="center">🚀 Funcionalidades</h2>
 
 <h3>🔐 Autenticación de usuarios</h3>
