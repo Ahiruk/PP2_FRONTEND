@@ -1,5 +1,16 @@
 import { useEffect, useState } from "react";
-import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  updateDoc,
+  addDoc,
+  onSnapshot,
+  serverTimestamp
+} from "firebase/firestore";
 import { auth, db } from "../../services/firebase";
 import { useNavigate } from "react-router-dom";
 import "./UserProfile.css";
@@ -9,36 +20,150 @@ export default function UserProfile() {
   const [userProjects, setUserProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("perfil");
+  const [editing, setEditing] = useState(false);
+  const [editedName, setEditedName] = useState("");
+  const [editedBio, setEditedBio] = useState("");
+  const [editedPhoto, setEditedPhoto] = useState(null);
+  const [previewPhoto, setPreviewPhoto] = useState(null);
+  const [editingProject, setEditingProject] = useState(null);
+  const [editedProject, setEditedProject] = useState({});
+  const [likesCount, setLikesCount] = useState(0);
+  const [lastActivity, setLastActivity] = useState(null);
 
   const navigate = useNavigate();
 
+  const CLOUDINARY_URL = import.meta.env.VITE_CLOUDINARY_URL;
+  const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_PRESET;
+
   useEffect(() => {
-    const fetchUserDataAndProjects = async () => {
+    const fetchData = async () => {
       const user = auth.currentUser;
       if (!user) return;
 
-      const docRef = doc(db, "usuarios", user.uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setUserData(docSnap.data());
+      const userRef = doc(db, "usuarios", user.uid);
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists()) {
+        const data = userSnap.data();
+        setUserData(data);
+        setEditedName(data.name || "");
+        setEditedBio(data.bio || "");
+        setPreviewPhoto(data.photoURL);
       }
 
       const q = query(collection(db, "projects"), where("uid", "==", user.uid));
-      const querySnapshot = await getDocs(q);
-      const projects = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const projectSnap = await getDocs(q);
+      const projects = projectSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setUserProjects(projects);
+
+      let totalLikes = 0;
+      let latest = null;
+
+      projects.forEach(proj => {
+        if (Array.isArray(proj.likes)) {
+          totalLikes += proj.likes.length;
+        }
+        if (!latest || new Date(proj.createdAt) > new Date(latest)) {
+          latest = proj.createdAt;
+        }
+      });
+
+      setLikesCount(totalLikes);
+      setLastActivity(latest);
 
       setLoading(false);
     };
-
-    fetchUserDataAndProjects();
+    fetchData();
   }, []);
+
+  const logActivity = async (type, projectId, details = {}) => {
+    const user = auth.currentUser;
+    if (!user) return;
+    await addDoc(collection(db, "logs"), {
+      userId: user.uid,
+      userEmail: user.email,
+      type,
+      projectId,
+      timestamp: new Date().toISOString(),
+      ...details,
+    });
+  };
+
+  const uploadToCloudinary = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+    const res = await fetch(CLOUDINARY_URL, {
+      method: "POST",
+      body: formData,
+    });
+    const data = await res.json();
+    return data.secure_url;
+  };
+
+  const handleSaveProfile = async () => {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    let photoURL = userData.photoURL;
+    if (editedPhoto) {
+      photoURL = await uploadToCloudinary(editedPhoto);
+    }
+
+    const docRef = doc(db, "usuarios", user.uid);
+    await updateDoc(docRef, {
+      name: editedName,
+      bio: editedBio,
+      photoURL,
+    });
+
+    setUserData({ ...userData, name: editedName, bio: editedBio, photoURL });
+    setEditing(false);
+  };
+
+  const handleEditProject = (project) => {
+    setEditingProject(project.id);
+    setEditedProject(project);
+  };
+
+  const handleProjectChange = (field, value) => {
+    setEditedProject(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSaveProject = async () => {
+    const { id, ...updates } = editedProject;
+    const ref = doc(db, "projects", id);
+    await updateDoc(ref, updates);
+    await logActivity("editar", id);
+    setUserProjects(prev => prev.map(p => (p.id === id ? editedProject : p)));
+    setEditingProject(null);
+  };
+
+  const handleDeleteProject = async (id) => {
+    if (!window.confirm("¿Eliminar este proyecto?")) return;
+    const ref = doc(db, "projects", id);
+    await updateDoc(ref, { deleted: true });
+    await logActivity("eliminar", id);
+    setUserProjects(prev => prev.filter(p => p.id !== id));
+  };
+
+  const handleLogCreation = async (projectId) => {
+    await logActivity("crear", projectId);
+  };
+
+  const handleLogLike = async (projectId) => {
+    await logActivity("like", projectId);
+  };
+
+  const handleLogComment = async (projectId, commentText) => {
+    await logActivity("comentario", projectId, { comment: commentText });
+  };
 
   if (loading) return <div className="user-profile-loading">Cargando perfil...</div>;
   if (!userData) return <div className="user-profile-error">No se encontraron datos del usuario.</div>;
 
   return (
-    <div className="user-dashboard">
+    <div className="user-dashboard responsive-layout">
       <div className="sidebar">
         <div className="avatar-mini">
           <img src={userData.photoURL} alt="Avatar" />
@@ -54,14 +179,42 @@ export default function UserProfile() {
           <>
             <h2 className="dashboard-title">Mi perfil</h2>
             <div className="profile-card">
-              <img src={userData.photoURL} alt="Foto de perfil" className="profile-img" />
-              <div className="profile-info">
-                <p><strong>Nombre:</strong> {userData.name}</p>
-                <p><strong>Email:</strong> {userData.email}</p>
-                <p><strong>Bio:</strong> {userData.bio || "No definida."}</p>
-                <p><strong>Último acceso:</strong> {new Date().toLocaleString()}</p>
+              <div className="profile-img-container">
+                <img src={previewPhoto} alt="Foto de perfil" className="profile-img editable" />
+                {editing && (
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      setEditedPhoto(e.target.files[0]);
+                      setPreviewPhoto(URL.createObjectURL(e.target.files[0]));
+                    }}
+                  />
+                )}
               </div>
-              <button className="edit-btn">Editar</button>
+              <div className="profile-info">
+                {editing ? (
+                  <>
+                    <label>Nombre:</label>
+                    <input value={editedName} onChange={(e) => setEditedName(e.target.value)} />
+                    <label>Bio:</label>
+                    <textarea value={editedBio} onChange={(e) => setEditedBio(e.target.value)} />
+                    <button className="edit-btn" onClick={handleSaveProfile}>Guardar</button>
+                    <button className="edit-btn" onClick={() => setEditing(false)}>Cancelar</button>
+                  </>
+                ) : (
+                  <>
+                    <p><strong>Nombre:</strong> {userData.name}</p>
+                    <p><strong>Email:</strong> {userData.email}</p>
+                    <p><strong>Bio:</strong> {userData.bio || "No definida."}</p>
+                    <p><strong>Último acceso:</strong> {new Date().toLocaleString()}</p>
+                    <p><strong>Total de proyectos:</strong> {userProjects.length}</p>
+                    <p><strong>Total de likes recibidos:</strong> {likesCount}</p>
+                    <p><strong>Última actividad:</strong> {lastActivity ? new Date(lastActivity).toLocaleString() : "No disponible"}</p>
+                    <button className="edit-btn" onClick={() => setEditing(true)}>Editar</button>
+                  </>
+                )}
+              </div>
             </div>
           </>
         )}
@@ -80,10 +233,52 @@ export default function UserProfile() {
                   <div key={project.id} className="project-card">
                     <h4>{project.title}</h4>
                     <p>{project.description}</p>
+                    <div className="project-actions">
+                      <button onClick={() => handleEditProject(project)}>Editar</button>
+                      <button className="delete" onClick={() => handleDeleteProject(project.id)}>Eliminar</button>
+                    </div>
                   </div>
                 ))
               )}
             </div>
+
+            {editingProject && (
+              <>
+                <div className="modal-backdrop" />
+                <div className="edit-form">
+                  <h3>Editar Proyecto</h3>
+
+                  <label>Título:</label>
+                  <input value={editedProject.title || ""} onChange={(e) => handleProjectChange("title", e.target.value)} />
+
+                  <label>Descripción:</label>
+                  <textarea value={editedProject.description || ""} onChange={(e) => handleProjectChange("description", e.target.value)} />
+
+                  <label>Etiqueta:</label>
+                  <select value={editedProject.tag || ""} onChange={(e) => handleProjectChange("tag", e.target.value)}>
+                    <option value="JavaScript">JavaScript</option>
+                    <option value="Python">Python</option>
+                    <option value="React">React</option>
+                    <option value="Node.js">Node.js</option>
+                  </select>
+
+                  <label>Visibilidad:</label>
+                  <select value={editedProject.visibility || "public"} onChange={(e) => handleProjectChange("visibility", e.target.value)}>
+                    <option value="public">Público</option>
+                    <option value="private">Privado</option>
+                  </select>
+
+                  <label>Link de GitHub:</label>
+                  <input value={editedProject.githubLink || ""} onChange={(e) => handleProjectChange("githubLink", e.target.value)} />
+
+                  <label>Link de Video:</label>
+                  <input value={editedProject.videoLink || ""} onChange={(e) => handleProjectChange("videoLink", e.target.value)} />
+
+                  <button className="btn-save" onClick={handleSaveProject}>Guardar</button>
+                  <button className="btn-cancel" onClick={() => setEditingProject(null)}>Cancelar</button>
+                </div>
+              </>
+            )}
           </>
         )}
       </div>
