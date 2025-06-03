@@ -17,6 +17,7 @@ import "./UserProfile.css";
 export default function UserProfile() {
   const [userData, setUserData] = useState(null);
   const [userProjects, setUserProjects] = useState([]);
+  const [favoriteProjects, setFavoriteProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("perfil");
   const [editing, setEditing] = useState(false);
@@ -52,6 +53,7 @@ export default function UserProfile() {
 
       const all = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       const filtered = all.filter(p => p.uid === user.uid && (!p.deleted || p.deleted === false));
+      const favProjects = all.filter(p => Array.isArray(p.favorites) && p.favorites.includes(user.uid));
 
       let totalLikes = 0;
       let latest = null;
@@ -66,6 +68,7 @@ export default function UserProfile() {
       });
 
       setUserProjects(filtered);
+      setFavoriteProjects(favProjects);
       setLikesCount(totalLikes);
       setLastActivity(latest);
 
@@ -169,12 +172,32 @@ export default function UserProfile() {
         <ul>
           <li onClick={() => setActiveTab("perfil")} className={activeTab === "perfil" ? "active" : ""}>Mi perfil</li>
           <li onClick={() => setActiveTab("proyectos")} className={activeTab === "proyectos" ? "active" : ""}>Mis proyectos</li>
+          <li onClick={() => setActiveTab("favoritos")}  className={activeTab === "favoritos" ? "active" : ""}>Favoritos</li>
           <li onClick={() => setActiveTab("actividad")} className={activeTab === "actividad" ? "active" : ""}>Actividad</li>
 
         </ul>
       </div>
 
       <div className="dashboard-content">
+      {activeTab === "favoritos" && (
+          <>
+            <h2 className="dashboard-title">Proyectos Favoritos</h2>
+            <div className="projects-list">
+              {favoriteProjects.length === 0 ? (
+                <p>No has marcado proyectos como favoritos aún.</p>
+              ) : (
+                favoriteProjects.map((project) => (
+                  <div key={project.id} className="project-card">
+                    <h4>{project.title}</h4>
+                    <p>{project.description}</p>
+                    <p><strong>Autor:</strong> {project.authorName || "Anónimo"}</p>
+                    <a href={`/proyecto/${project.id}`}>Ver más</a>
+                  </div>
+                ))
+              )}
+            </div>
+          </>
+        )}
         {activeTab === "perfil" && (
           <>
             <h2 className="dashboard-title">Mi perfil</h2>
