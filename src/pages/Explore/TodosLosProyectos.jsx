@@ -18,18 +18,19 @@ import "./TodosProyectos.css";
 const TodosLosProyectos = () => {
   const [projects, setProjects] = useState([]);
   const [tagsArray, setTagsArray] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [openId, setOpenId] = useState(null);
   const [comment, setComment] = useState("");
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Todas");
   const [showFollowingOnly, setShowFollowingOnly] = useState(false);
   const [following, setFollowing] = useState([]);
+  const [usuarios, setUsuarios] = useState({});
+  const [logros, setLogros] = useState({});
   const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const unsub = onSnapshot(collection(db, "projects"), async (snap) => {
+    const unsubProjects = onSnapshot(collection(db, "projects"), async (snap) => {
       const all = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
       const publics = all.filter((p) => !p.deleted && p.visibility === "public");
 
@@ -58,11 +59,33 @@ const TodosLosProyectos = () => {
         });
       });
       setTagsArray(Array.from(tagSet).sort());
-      setLoading(false);
     });
 
-    return () => unsub();
-  }, [user]);
+    const unsubUsers = onSnapshot(collection(db, "usuarios"), (snap) => {
+      const data = {};
+      const logrosTemp = {};
+      snap.docs.forEach((d) => {
+        const u = d.data();
+        data[d.id] = u;
+        const userProjs = projects.filter((p) => p.uid === d.id);
+        const likes = userProjs.reduce((sum, p) => sum + (p.likes?.length || 0), 0);
+        const comments = userProjs.reduce((sum, p) => sum + (p.comments?.length || 0), 0);
+        const logrosUser = [];
+        if (userProjs.length > 0) logrosUser.push("\u{1F389} Primer Proyecto");
+        if ((u.seguidores?.length || 0) >= 10) logrosUser.push("\u{1F465} 10 Seguidores");
+        if (likes >= 10) logrosUser.push("\u{1F525} Proyecto Popular");
+        if (comments >= 5) logrosUser.push("\u{1F4AC} Muy comentado");
+        logrosTemp[d.id] = logrosUser;
+      });
+      setUsuarios(data);
+      setLogros(logrosTemp);
+    });
+
+    return () => {
+      unsubProjects();
+      unsubUsers();
+    };
+  }, [user, projects]);
 
   const toggleField = async (proj, field) => {
     if (!user) return alert("Debes iniciar sesión.");
@@ -113,13 +136,26 @@ const TodosLosProyectos = () => {
     return matchText && matchCat && matchFollowing;
   });
 
-  if (loading)
-    return (
-      <div className="loading-container">
-        <div className="loader" />
-        <p className="loading-text">Cargando todos los proyectos…</p>
-      </div>
-    );
+  const calcularReputacion = (usuario) => {
+    const proyectos = projects.filter((p) => p.uid === usuario);
+    let puntos = 0;
+    proyectos.forEach((p) => {
+      puntos += (p.likes?.length || 0) * 2;
+      puntos += (p.comments?.length || 0);
+    });
+    puntos += proyectos.length * 5;
+    puntos += (usuarios[usuario]?.seguidores?.length || 0) * 2;
+    return puntos;
+  };
+
+  const ranking = Object.entries(usuarios)
+    .map(([uid, datos]) => ({
+      uid,
+      nombre: datos.name || datos.nombre || "Anónimo",
+      puntos: calcularReputacion(uid),
+    }))
+    .sort((a, b) => b.puntos - a.puntos)
+    .slice(0, 10);
 
   return (
     <div className="todos-container">
@@ -186,13 +222,14 @@ const TodosLosProyectos = () => {
             const fav = user && p.favorites?.includes(user.uid);
             const open = openId === p.id;
             const sigoAutor = user && following.includes(p.uid);
+            const autorNombre = usuarios[p.uid]?.name || usuarios[p.uid]?.nombre || p.authorName || "Anónimo";
 
             return (
               <div key={p.id} className={`todos-card ${sigoAutor ? "seguido-card" : ""}`}>
                 {p.imageUrl && <img src={p.imageUrl} alt={p.title} className="card-img" />}
                 <h3>{p.title}</h3>
                 <p className="autor">
-                  Autor: <Link to={`/profile/${p.uid}`}>{p.authorName || "Anónimo"}</Link>
+                  Autor: <Link to={`/perfil/${p.uid}`}>{autorNombre}</Link>
                   {sigoAutor && <span className="siguiendo-label"> — Sigues a este usuario</span>}
                 </p>
 
@@ -219,7 +256,7 @@ const TodosLosProyectos = () => {
                     <ul>
                       {(p.comments || []).map((c, i) => (
                         <li key={i}>
-                          <b><Link to={`/profile/${c.userId}`}>{c.userEmail}</Link></b>: {c.text}
+                          <b><Link to={`/perfil/${c.userId}`}>{c.userEmail}</Link></b>: {c.text}
                         </li>
                       ))}
                     </ul>
@@ -245,6 +282,28 @@ const TodosLosProyectos = () => {
           })}
         </div>
       </section>
+
+      <section id="ranking-usuarios">
+  <h2 className="todos-title">Ranking de usuarios más activos</h2>
+  <div className="ranking-grid">
+    {ranking.map((u, i) => (
+      <div key={u.uid} className="ranking-card">
+        <div className="ranking-header">
+          <span className="ranking-position">#{i + 1}</span>
+          <span className="ranking-name">{u.nombre}</span>
+        </div>
+        <div className="ranking-points">{u.puntos} puntos</div>
+        {logros[u.uid] && (
+          <div className="ranking-logros">
+            {logros[u.uid].map((logro, j) => (
+              <div key={j} className="logro-badge">{logro}</div>
+            ))}
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+</section>
     </div>
   );
 };
