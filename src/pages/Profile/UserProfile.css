@@ -102,3 +102,43 @@
     font-size: 1.2rem;
     color: var(--text-color);
 }
+
+.dashboard-subtitle {
+    margin-top: 2rem;
+    font-size: 1.4rem;
+    color: #333;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 0.5rem;
+}
+
+.projects-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.project-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    padding: 1rem 1.2rem;
+    transition: transform 0.2s ease;
+    cursor: pointer;
+    border-left: 5px solid #035e7b;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+}
+
+.project-card h4 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #035e7b;
+}
+
+.project-card p {
+    font-size: 0.95rem;
+    color: #555;
+}
