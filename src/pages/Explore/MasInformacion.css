@@ -152,3 +152,22 @@ textarea {
   background: var(--background-color);
   color: var(--text-color);
 }
+
+/* Enlaces (GitHub / YouTube) dentro de la tarjeta */
+.mi-card a {
+  color: rgb(0, 0, 0);  
+  font-weight: 400;               
+  text-decoration: underline;    
+}
+
+.mi-card a:hover {
+  color: var(--primary-color);    
+}
+
+.dark .mi-card a {
+  color: #9ac1ff;           
+}
+
+.dark .mi-card a:hover {
+  color: #ecedee;            /
+}

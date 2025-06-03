@@ -1,71 +1,87 @@
+// src/pages/Explore/TodosLosProyectos.jsx
 import { useEffect, useState } from "react";
 import {
-  collection, getDocs, doc, updateDoc,
-  arrayUnion, arrayRemove
+  collection,
+  onSnapshot,            // ← ahora usamos listener en tiempo real
+  doc, updateDoc, arrayUnion, arrayRemove
 } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";          // 👈  tu hook de sesión
+import { useAuth } from "../../hooks/useAuth";
 import "./TodosProyectos.css";
 
 const TodosLosProyectos = () => {
-  const [projects, setProjects] = useState([]);
-  const [loading,  setLoading]  = useState(true);
-  const [openId,   setOpenId]   = useState(null);       // tarjeta con comentarios abiertos
-  const [comment,  setComment]  = useState("");
-  const { user }                = useAuth();
-  const navigate                = useNavigate();
+  const [projects,  setProjects]  = useState([]);
+  const [tagsArray, setTagsArray] = useState([]);     // categorías dinámicas
+  const [loading,   setLoading]   = useState(true);
+  const [openId,    setOpenId]    = useState(null);
+  const [comment,   setComment]   = useState("");
+  const [search,    setSearch]    = useState("");
+  const [category,  setCategory]  = useState("Todas");
+  const { user }                 = useAuth();
+  const navigate                 = useNavigate();
 
-  /* -------- Traer proyectos públicos -------- */
+  /* -------- Listener en tiempo real -------- */
   useEffect(() => {
-    (async () => {
-      try {
-        const snap = await getDocs(collection(db, "projects"));
-        const all  = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        setProjects(all.filter(p => !p.deleted && p.visibility === "public"));
-      } catch (e) { console.error("❌ Error al obtener proyectos:", e); }
-      finally   { setLoading(false); }
-    })();
+    const unsub = onSnapshot(collection(db, "projects"), snap => {
+      const all  = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      const publics = all.filter(p => !p.deleted && p.visibility === "public");
+      setProjects(publics);
+
+      // construir set de categorías => tags + type + technology + theme
+      const tagSet = new Set();
+      publics.forEach(p => {
+        if (Array.isArray(p.tags)) p.tags.forEach(t => tagSet.add(t));
+        ["type", "technology", "theme"].forEach(f => {
+          if (p[f] && typeof p[f] === "string") tagSet.add(p[f]);
+        });
+      });
+      setTagsArray(Array.from(tagSet).sort());
+      setLoading(false);
+    });
+
+    return () => unsub();
   }, []);
 
-  /* -------- Helpers de Firestore (like, fav, comment) -------- */
+  /* -------- Helpers Firestore -------- */
   const toggleField = async (proj, field) => {
     if (!user) return alert("Debes iniciar sesión.");
-    const ref   = doc(db, "projects", proj.id);
-    const hasIt = proj[field]?.includes(user.uid);
-
-    await updateDoc(ref, {
-      [field]: hasIt ? arrayRemove(user.uid) : arrayUnion(user.uid),
+    await updateDoc(doc(db, "projects", proj.id), {
+      [field]: proj[field]?.includes(user.uid)
+        ? arrayRemove(user.uid)
+        : arrayUnion(user.uid),
     });
-    setProjects(prev => prev.map(p =>
-      p.id === proj.id
-        ? {
-            ...p,
-            [field]: hasIt
-              ? p[field].filter(uid => uid !== user.uid)
-              : [...(p[field] || []), user.uid],
-          }
-        : p
-    ));
   };
 
   const addComment = async proj => {
     if (!user) return alert("Debes iniciar sesión.");
     if (!comment.trim()) return;
-
-    const ref = doc(db, "projects", proj.id);
     const newCom = {
       userId: user.uid,
       userEmail: user.email,
       text: comment.trim(),
       createdAt: new Date().toISOString(),
     };
-    await updateDoc(ref, { comments: arrayUnion(newCom) });
-    setProjects(prev => prev.map(p =>
-      p.id === proj.id ? { ...p, comments: [...(p.comments || []), newCom] } : p
-    ));
+    await updateDoc(doc(db, "projects", proj.id), {
+      comments: arrayUnion(newCom),
+    });
     setComment("");
   };
+
+  /* -------- Filtro texto + categoría -------- */
+  const q = search.toLowerCase();
+  const visible = projects.filter(p => {
+    const title  = (p.title || "").toLowerCase();
+    const desc   = (p.description || "").toLowerCase();
+    const tagsS  = Array.isArray(p.tags) ? p.tags.join(" ").toLowerCase() : "";
+    const matchText = title.includes(q) || desc.includes(q) || tagsS.includes(q);
+    const matchCat  = category === "Todas" ||
+                      (Array.isArray(p.tags) && p.tags.includes(category)) ||
+                      p.type === category ||
+                      p.technology === category ||
+                      p.theme === category;
+    return matchText && matchCat;
+  });
 
   /* -------- Loader -------- */
   if (loading)
@@ -76,62 +92,73 @@ const TodosLosProyectos = () => {
       </div>
     );
 
+  /* -------- UI -------- */
   return (
     <div className="todos-container">
-      {/* ---------- HERO ---------- */}
+      {/* HERO */}
       <section className="hero">
         <h1>Mi OpenLab</h1>
         <p>Explora proyectos públicos o comparte los tuyos con la comunidad.</p>
-
         <div className="hero-buttons">
           <button className="btn-primary" onClick={() => navigate("/register")}>
             Regístrate
           </button>
         </div>
-
         <button className="login-link" onClick={() => navigate("/login")}>
           Iniciar sesión
         </button>
       </section>
 
-      {/* ---------- LISTA DE PROYECTOS ---------- */}
+      {/* Búsqueda */}
+      <div className="search-bar">
+        <input
+          type="search"
+          placeholder="Buscar por título, descripción o etiquetas…"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+        />
+      </div>
+
+      {/* Filtro de categoría */}
+      <div className="filter-bar">
+        <select value={category} onChange={e => setCategory(e.target.value)}>
+          <option value="Todas">Todas las categorías</option>
+          {tagsArray.map(t => (
+            <option key={t} value={t}>{t}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Lista */}
       <section id="lista-proyectos">
         <h2 className="todos-title">Proyectos públicos</h2>
-
-        {projects.length === 0 && <p>No hay proyectos disponibles.</p>}
+        {visible.length === 0 && <p>No hay proyectos que coincidan.</p>}
 
         <div className="todos-grid">
-          {projects.map(p => {
+          {visible.map(p => {
             const liked = user && p.likes?.includes(user.uid);
             const fav   = user && p.favorites?.includes(user.uid);
             const open  = openId === p.id;
 
             return (
               <div key={p.id} className="todos-card">
-                {/* Miniatura */}
-                {p.imageUrl && (
-                  <img src={p.imageUrl} alt={p.title} className="card-img" />
-                )}
-
+                {p.imageUrl && <img src={p.imageUrl} alt={p.title} className="card-img" />}
                 <h3>{p.title}</h3>
                 <p className="autor">Autor: {p.authorName || "Anónimo"}</p>
 
-                {/* Acciones */}
                 <div className="card-actions">
                   <button
                     title="Like"
                     onClick={() => toggleField(p, "likes")}
-                    style={{ color: liked ? "red" : "gray" }}>
+                    style={{ color: liked ? "red" : {} }}>
                     ❤️ {p.likes?.length || 0}
                   </button>
-
                   <button
                     title="Favorito"
                     onClick={() => toggleField(p, "favorites")}
-                    style={{ color: fav ? "gold" : "gray" }}>
-                    ⭐
+                    style={{ color: fav ? "gold" : {} }}>
+                    ⭐ {p.favorites?.length || 0}
                   </button>
-
                   <button
                     title="Comentarios"
                     onClick={() => setOpenId(open ? null : p.id)}>
@@ -139,7 +166,6 @@ const TodosLosProyectos = () => {
                   </button>
                 </div>
 
-                {/* Panel de comentarios inline */}
                 {open && (
                   <div className="card-comments">
                     <ul>
@@ -161,7 +187,6 @@ const TodosLosProyectos = () => {
                   </div>
                 )}
 
-                {/* Enlace detalle */}
                 <Link to={`/proyecto/${p.id}`} className="mas-info">
                   Más información
                 </Link>

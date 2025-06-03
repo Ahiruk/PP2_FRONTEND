@@ -6,7 +6,8 @@
   --background-color: #EEF5FF;  /* Fondo claro */
   --text-color: #333333;        /* Texto oscuro */
   --error-color: #F44336;       /* Rojo para errores */
-}
+  --comment-color: #020c16; 
+} 
 
 /* 🌙 Tema Oscuro */
 body.dark {
@@ -16,6 +17,7 @@ body.dark {
   --background-color: #1E1E2F;
   --text-color: #ffffff;
   --error-color: #FF6B6B;
+  --comment-color: #EEF5FF;  
 }
 
 body.dark .form-group label{
