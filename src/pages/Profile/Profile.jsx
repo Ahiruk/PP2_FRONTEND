@@ -42,7 +42,7 @@ const Profile = () => {
       }
     };
     fetchProjects();
-  }, [user]);ls
+  }, [user]);
 
   const handleDelete = async id => {
     if (!window.confirm("¿Eliminar este proyecto?")) return;
