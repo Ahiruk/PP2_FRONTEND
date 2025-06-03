@@ -125,7 +125,7 @@ const PerfilPublico = () => {
           {seguidosData.map((u) => (
             <li key={u.id}>
             <Link
-  to={`/perfil/${u.id}`}
+  to={`/profile/${u.id}`}
   className="usuario-item-link"
   title={u.email || "Correo no disponible"}
 >
@@ -154,7 +154,7 @@ const PerfilPublico = () => {
           {seguidoresData.map((u) => (
             <li key={u.id}>
             <Link
-  to={`/perfil/${u.id}`}
+  to={`/profile/${u.id}`}
   className="usuario-item-link"
   title={u.email || "Correo no disponible"}
 >
