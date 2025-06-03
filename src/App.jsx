@@ -15,6 +15,8 @@ import ProyectoDetalle from "../src/pages/ProjectView/ProyectoDetalle";
 import EditarPerfil from "../src/pages/Profile/EditarPerfil";
 import PerfilProfesional from "../src/pages/Profile/PerfilProfesional"; // 🆕
 import PerfilPublico from "../src/pages/Profile/PerfilPublico"; // 🆕
+import Comunidades from "../src/pages/Explore/Comunidades"; // 🆕
+import CrearComunidad from "../src/pages/ProjectView/CrearComunidad";
 
 
 // Componentes
@@ -62,7 +64,19 @@ function App() {
   }
 />
 
+<Route
+  path="/crearcomunidad"
+  element={
+    <PrivateRoute>
+      <CrearComunidad />
+    </PrivateRoute>
+  }
+/>
+
 <Route path="/profile/:uid" element={<PerfilPublico />} />
+
+<Route path="/comunidades" element={<Comunidades />} />
+
 
 
         <Route
