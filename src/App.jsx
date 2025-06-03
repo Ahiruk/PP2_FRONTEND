@@ -10,6 +10,7 @@ import MasInformacion from "../src/pages/Explore/MasInformacion";
 // Páginas privadas
 import Profile from "../src/pages/Profile/Profile";
 import NewProject from "../src/pages/Profile/NewProject";
+import ProyectoDetalle from "../src/pages/ProjectView/ProyectoDetalle"; // ✅ import correcto
 
 // Componentes
 import PrivateRoute from "../src/components/PrivateRoute";
@@ -46,13 +47,20 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route
+          path="/project"
+          element={
+            <PrivateRoute>
+              <ProyectoDetalle />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </>
   );
 }
 
 export default App;
-
 
 // Este es el componente principal de la aplicación. Define las rutas de la aplicación utilizando react-router-dom.
 // Las rutas públicas incluyen el inicio de sesión, registro, exploración y detalles del proyecto.
