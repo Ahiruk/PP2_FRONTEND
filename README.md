@@ -1,6 +1,6 @@
 <h1> Parcial Frontend</h1>
 
-<h2>Despliegue en Vercel: https://openlabpp2.vercel.app/}</h2>
+<h2>Despliegue en Vercel: https://openlabpp2.vercel.app/</h2>
 
 <p align="center"><i>
 Empower Your Projects, Connect with Your Community
