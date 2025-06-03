@@ -194,12 +194,17 @@ const TodosLosProyectos = () => {
       </div>
 
       <div className="filter-bar">
-        <select value={category} onChange={(e) => setCategory(e.target.value)}>
+        <select
+          className="custom-select"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
           <option value="Todas">Todas las categorías</option>
           {tagsArray.map((t) => (
             <option key={t} value={t}>{t}</option>
           ))}
         </select>
+
 
         {user && (
           <button
@@ -237,13 +242,13 @@ const TodosLosProyectos = () => {
                   <button
                     title="Like"
                     onClick={() => toggleField(p, "likes")}
-                    style={{ color: liked ? "red" : "gray" }}>
+                    style={{ color: liked ? {} : {} }}>
                     ❤️ {p.likes?.length || 0}
                   </button>
                   <button
                     title="Favorito"
                     onClick={() => toggleField(p, "favorites")}
-                    style={{ color: fav ? "gold" : "gray" }}>
+                    style={{ color: fav ? {} : {} }}>
                     ⭐ {p.favorites?.length || 0}
                   </button>
                   <button title="Comentarios" onClick={() => setOpenId(open ? null : p.id)}>
@@ -284,26 +289,26 @@ const TodosLosProyectos = () => {
       </section>
 
       <section id="ranking-usuarios">
-  <h2 className="todos-title">Ranking de usuarios más activos</h2>
-  <div className="ranking-grid">
-    {ranking.map((u, i) => (
-      <div key={u.uid} className="ranking-card">
-        <div className="ranking-header">
-          <span className="ranking-position">#{i + 1}</span>
-          <span className="ranking-name">{u.nombre}</span>
+        <h2 className="todos-title">Ranking de usuarios más activos</h2>
+        <div className="ranking-grid">
+          {ranking.map((u, i) => (
+            <div key={u.uid} className="ranking-card">
+              <div className="ranking-header">
+                <span className="ranking-position">#{i + 1}</span>
+                <span className="ranking-name">{u.nombre}</span>
+              </div>
+              <div className="ranking-points">{u.puntos} puntos</div>
+              {logros[u.uid] && (
+                <div className="ranking-logros">
+                  {logros[u.uid].map((logro, j) => (
+                    <div key={j} className="logro-badge">{logro}</div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
-        <div className="ranking-points">{u.puntos} puntos</div>
-        {logros[u.uid] && (
-          <div className="ranking-logros">
-            {logros[u.uid].map((logro, j) => (
-              <div key={j} className="logro-badge">{logro}</div>
-            ))}
-          </div>
-        )}
-      </div>
-    ))}
-  </div>
-</section>
+      </section>
     </div>
   );
 };

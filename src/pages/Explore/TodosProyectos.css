@@ -276,7 +276,7 @@
 }
 
 .card-comments textarea {
-  width: 100%;
+  width: 90%;
   border-radius: 4px;
   resize: vertical;
   margin: 4px 0;
@@ -349,29 +349,28 @@
 }
 
 .seguido-card {
-  border: 2px solid #2d6cdf;
   background-color: #f0f6ff;
 }
 
 body.dark .seguido-card {
   background-color: #2a2a3b;
   border-color: var(--primary-color);
-  box-shadow: 0 0 8px rgba(0, 153, 255, 0.2);
+ 
 }
 
 body.dark .seguido-card:hover {
   background-color: #323249;
-  box-shadow: 0 0 12px rgba(0, 153, 255, 0.3);
+  
 }
 
 .siguiendo-label {
-  color: #2d6cdf;
+  color: var(--primary-color);
   font-weight: 600;
   font-size: 0.85rem;
 }
 
 body.dark .siguiendo-label {
-  color: var(--secondary-color);
+  color: var(--text-color);
 }
 
 
@@ -480,4 +479,92 @@ body.dark .ranking-position {
   padding: 0.3rem 0.6rem;
   border-radius: 999px;
 
+}
+
+.custom-select {
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 2px solid var(--accent-color);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='gray' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><polygon points='0,5 20,5 10,15'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px top 50%;
+  background-size: 10px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.custom-select:hover {
+  border-color: var(--primary-color);
+}
+
+.custom-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(23, 107, 135, 0.2);
+}
+
+body.dark .custom-select {
+  background-color: #2e2e42;
+  border-color: #3f3f5a;
+  color: #ffffff;
+}
+
+body.dark .custom-select:hover,
+body.dark .custom-select:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(180, 212, 255, 0.2);
+}
+.custom-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-button {
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 2px solid var(--accent-color);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  background-color: var(--background-color);
+  border: 2px solid var(--accent-color);
+  border-radius: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0.3rem 0 0;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-menu li {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dropdown-menu li:hover {
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+}
+
+body.dark .dropdown-menu {
+  background-color: #2e2e42;
+}
+
+body.dark .dropdown-menu li:hover {
+  background-color: var(--primary-color);
+  color: white;
 }
