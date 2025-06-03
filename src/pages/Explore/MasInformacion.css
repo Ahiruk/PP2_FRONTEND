@@ -128,3 +128,27 @@
   66%  { background-position: -100% 66%, 0% 66%, 100% 66%; }
   100% { background-position: 0% 100%, 100% 100%, 200% 100%; }
 }
+
+.mi-image-container {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.mi-image {
+  max-width: 90%;
+  max-height: 250px;
+  border-radius: 0.5rem;
+  object-fit: cover;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+textarea {
+  width: 100%;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 0.4rem;
+  border: 1px solid var(--text-color);
+  background: var(--background-color);
+  color: var(--text-color);
+}
