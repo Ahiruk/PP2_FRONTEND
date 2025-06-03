@@ -1,87 +1,140 @@
-// src/pages/PerfilPublico.jsx
-
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { db } from "../../services/firebase";
-import { doc, getDoc } from "firebase/firestore";
-import "./PerfilProfesional.css";
+import {
+  db,
+  auth
+} from "../../services/firebase";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+  collection,
+  onSnapshot
+} from "firebase/firestore";
+import "./PerfilPublico.css";
 
 const PerfilPublico = () => {
   const { uid } = useParams();
   const [perfil, setPerfil] = useState(null);
+  const currentUser = auth.currentUser;
+  const [seguido, setSeguido] = useState(false);
+  const [proyectos, setProyectos] = useState([]);
 
   useEffect(() => {
     const fetchPerfil = async () => {
       try {
-        const docRef = doc(db, "perfilesProfesionales", uid);
+        const docRef = doc(db, "usuarios", uid);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          setPerfil(docSnap.data());
-        } else {
-          console.log("No se encontró perfil");
+          const data = docSnap.data();
+          setPerfil(data);
+          setSeguido(data.seguidores?.includes(currentUser?.uid));
         }
       } catch (error) {
         console.error("Error al cargar perfil:", error);
       }
     };
 
+    const unsub = onSnapshot(collection(db, "projects"), (snap) => {
+      const all = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      const delUsuario = all.filter(p => p.uid === uid && p.visibility === "public" && !p.deleted);
+      setProyectos(delUsuario);
+    });
+
     fetchPerfil();
+    return () => unsub();
   }, [uid]);
 
-  if (!perfil) return <p>Cargando perfil...</p>;
+  const toggleSeguir = async () => {
+    if (!currentUser) return alert("Debes iniciar sesión para seguir usuarios.");
+    const yoRef = doc(db, "usuarios", currentUser.uid);
+    const elRef = doc(db, "usuarios", uid);
+
+    await updateDoc(yoRef, {
+      siguiendo: seguido ? arrayRemove(uid) : arrayUnion(uid)
+    });
+
+    await updateDoc(elRef, {
+      seguidores: seguido ? arrayRemove(currentUser.uid) : arrayUnion(currentUser.uid)
+    });
+
+    setSeguido(!seguido);
+  };
+
+  if (!perfil) return <p className="loading">Cargando perfil...</p>;
 
   return (
-    <div className="perfil-container">
-      <h2>{perfil.nombre}</h2>
-      <p>{perfil.biografia}</p>
-
-      <h3>🎓 Educación</h3>
-      <ul>
-        {perfil.educacion.map((edu, i) => (
-          <li key={i}>{edu}</li>
-        ))}
-      </ul>
-
-      <h3>💼 Experiencia</h3>
-      <ul>
-        {perfil.experiencia.map((exp, i) => (
-          <li key={i}>{exp}</li>
-        ))}
-      </ul>
-
-      <h3>🧠 Habilidades</h3>
-      <ul>
-        {perfil.habilidades.map((hab, i) => (
-          <li key={i}>{hab}</li>
-        ))}
-      </ul>
-
-      <h3>🛠️ Tecnologías dominadas</h3>
-      <ul>
-        {perfil.tecnologias.map((tech, i) => (
-          <li key={i}>{tech}</li>
-        ))}
-      </ul>
-
-      <h3>🔗 Redes sociales</h3>
-      <ul>
-        {perfil.linkedin && (
-          <li>
-            <a href={perfil.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-          </li>
+    <div className="perfil-publico-container">
+      <div className="perfil-header">
+        {perfil.photoURL && (
+          <img
+            src={perfil.photoURL}
+            alt="Foto de perfil"
+            className="perfil-foto"
+            style={{
+              width: "120px",
+              height: "120px",
+              borderRadius: "50%",
+              objectFit: "cover",
+              marginRight: "1rem",
+            }}
+          />
         )}
-        {perfil.github && (
-          <li>
-            <a href={perfil.github} target="_blank" rel="noopener noreferrer">GitHub</a>
-          </li>
+
+        <div>
+          <h2>{perfil.name || perfil.nombre}</h2>
+          <p className="perfil-bio">{perfil.bio || perfil.biografia}</p>
+
+          {currentUser && currentUser.uid !== uid && (
+            <button onClick={toggleSeguir} className="btn-follow">
+              {seguido ? "Dejar de seguir" : "Seguir"}
+            </button>
+          )}
+        </div>
+      </div>
+
+      {[
+        { label: "🎓 Educación", data: perfil.educacion },
+        { label: "💼 Experiencia", data: perfil.experiencia },
+        { label: "🧠 Habilidades", data: perfil.habilidades },
+        { label: "🛠️ Tecnologías dominadas", data: perfil.tecnologias },
+      ].map((section, idx) => (
+        <div className="perfil-publico-section" key={idx}>
+          <h3>{section.label}</h3>
+          {section.data?.length > 0 ? (
+            <ul className="perfil-publico-list">
+              {section.data.map((item, i) => <li key={i}>{item}</li>)}
+            </ul>
+          ) : (
+            <p>No hay información disponible.</p>
+          )}
+        </div>
+      ))}
+
+      <div className="perfil-publico-section">
+        <h3>🔗 Redes sociales</h3>
+        <ul className="perfil-publico-links">
+          {perfil.linkedin && <li><a href={perfil.linkedin} target="_blank">LinkedIn</a></li>}
+          {perfil.github && <li><a href={perfil.github} target="_blank">GitHub</a></li>}
+          {perfil.twitter && <li><a href={perfil.twitter} target="_blank">Twitter</a></li>}
+        </ul>
+      </div>
+
+      <div className="perfil-publico-section">
+        <h3>📁 Proyectos públicos</h3>
+        {proyectos.length === 0 ? (
+          <p>No hay proyectos disponibles.</p>
+        ) : (
+          <ul className="perfil-publico-list">
+            {proyectos.map((p) => (
+              <li key={p.id}><strong>{p.title}</strong>: {p.description}</li>
+            ))}
+          </ul>
         )}
-        {perfil.twitter && (
-          <li>
-            <a href={perfil.twitter} target="_blank" rel="noopener noreferrer">Twitter</a>
-          </li>
-        )}
-      </ul>
+      </div>
     </div>
   );
 };
