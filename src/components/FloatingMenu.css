@@ -62,8 +62,9 @@
    —————————————————————————————— */
 .fab-link {
   position: relative;
-  width: 48px;
-  height: 48px;
+  width: 56px;   /* igual al botón principal */
+  height: 56px;  /* igual al botón principal */
+  font-size: 24px; 
   border-radius: 50%;
   background: var(--accent-color);
   color: var(--text-color);
@@ -161,4 +162,30 @@ body.dark .fab-main:hover {
   /* color de fondo al hover en oscuro */
   color: #2e2e42;
   /* icono en blanco al hover */
+}
+.font-size-menu {
+  position: absolute;
+  right: 60px;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: var(--background-color);
+  padding: 0.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.font-size-menu .fab-link {
+  width: 56px;
+  height: 56px;
+  font-size: 24px;
+}
+
+.font-size-menu .fab-link svg {
+  width: 24px;
+  height: 24px;
+}
+.font-size-menu .fab-tooltip {
+  right: 110%;
 }
