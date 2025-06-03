@@ -32,7 +32,7 @@ const Login = () => {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/profile");
+      navigate("/todoslosproyectos");
     } catch (err) {
       if (err.code === "auth/user-not-found") {
         setError("No existe una cuenta con este correo.");

@@ -9,7 +9,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { useAuth } from "../../hooks/useAuth";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../../services/firebase";
 import "./Profile.css";
@@ -47,8 +47,8 @@ const Profile = () => {
           where("uid", "==", user.uid)
         );
         const snap = await getDocs(q);
-        const all = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        setProjects(all.filter(p => p.deleted !== true));
+        const all = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        setProjects(all.filter((p) => p.deleted !== true));
       } catch (e) {
         console.error(e);
       } finally {
@@ -69,18 +69,19 @@ const Profile = () => {
     });
 
     const json = await res.json();
-    if (!json.secure_url) throw new Error("Error al subir imagen a Cloudinary");
+    if (!json.secure_url)
+      throw new Error("Error al subir imagen a Cloudinary");
     return json.secure_url;
   };
 
-  const handleDelete = async id => {
+  const handleDelete = async (id) => {
     if (!window.confirm("¿Eliminar este proyecto?")) return;
     const ref = doc(db, "projects", id);
     await updateDoc(ref, { deleted: true });
-    setProjects(prev => prev.filter(p => p.id !== id));
+    setProjects((prev) => prev.filter((p) => p.id !== id));
   };
 
-  const handleEdit = proj => {
+  const handleEdit = (proj) => {
     setEditingProject(proj);
     setEditedTitle(proj.title || "");
     setEditedDescription(proj.description || "");
@@ -119,8 +120,8 @@ const Profile = () => {
         imageUrl: imageUrl || null,
       });
 
-      setProjects(ps =>
-        ps.map(p =>
+      setProjects((ps) =>
+        ps.map((p) =>
           p.id === editingProject.id
             ? {
                 ...p,
@@ -263,7 +264,12 @@ const Profile = () => {
               <img
                 src={editedImageUrl}
                 alt="Imagen destacada"
-                style={{ width: "100%", maxHeight: "150px", objectFit: "cover", marginBottom: "10px" }}
+                style={{
+                  width: "100%",
+                  maxHeight: "150px",
+                  objectFit: "cover",
+                  marginBottom: "10px",
+                }}
               />
             )}
             <input
@@ -277,11 +283,7 @@ const Profile = () => {
               }}
             />
 
-            <button
-              onClick={handleSave}
-              className="btn-save"
-              disabled={saving}
-            >
+            <button onClick={handleSave} className="btn-save" disabled={saving}>
               {saving ? "Guardando..." : "Guardar Cambios"}
             </button>
             <button
@@ -294,6 +296,24 @@ const Profile = () => {
           </div>
         </>
       )}
+
+      {/* Botón para ir a /todoslosproyectos */}
+      <button
+        onClick={() => navigate("/todoslosproyectos")}
+        className="btn-new"
+        style={{ marginBottom: "1rem" }}
+      >
+        Explorar proyectos
+      </button>
+
+      {/* Nuevo botón para ir a /profile/view */}
+      <button
+        onClick={() => navigate("/profile/view")}
+        className="btn-new"
+        style={{ marginBottom: "1rem" }}
+      >
+        Ver perfil detallado
+      </button>
 
       <button onClick={handleLogout} className="btn-new">
         Cerrar sesión

@@ -162,7 +162,6 @@
 
 
 
-
 /* ---------- HERO ---------- */
 .hero {
   text-align: center;
@@ -182,11 +181,12 @@
   margin-bottom: 1.5rem;
 }
 
+/* Modificado: ahora vertical y centrado */
 .hero-buttons {
   display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
 }
 
 /* --- Botones del hero (NO afectan login) --- */
@@ -315,3 +315,4 @@
   outline:none;
   border-color:var(--primary-color);
 }
+

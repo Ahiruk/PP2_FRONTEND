@@ -9,7 +9,8 @@ import {
   arrayRemove,
   addDoc
 } from "firebase/firestore";
-import { db } from "../../services/firebase";
+import { signOut } from "firebase/auth";
+import { db, auth } from "../../services/firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import "./TodosProyectos.css";
@@ -114,6 +115,7 @@ const TodosLosProyectos = () => {
       <section className="hero">
         <h1>Mi OpenLab</h1>
         <p>Explora proyectos públicos o comparte los tuyos con la comunidad.</p>
+
         <div className="hero-buttons">
           <button className="btn-primary" onClick={() => navigate("/register")}>Regístrate</button>
         </div>
