@@ -18,7 +18,7 @@ const THEME_OPTIONS = ["Educación", "Salud", "Finanzas", "Material Uninorte"];
 const ProjectForm = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [tags, setTags] = useState([]);       // ← array
+  const [tags, setTags] = useState([]);
   const [type, setType] = useState(TYPE_OPTIONS[0]);
   const [technology, setTechnology] = useState(TECH_OPTIONS[0]);
   const [theme, setTheme] = useState(THEME_OPTIONS[0]);
@@ -36,7 +36,6 @@ const ProjectForm = () => {
   const CLOUDINARY_URL = import.meta.env.VITE_CLOUDINARY_URL;
   const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_PRESET;
 
-  /* ---------- utilidades ---------- */
   const uploadToCloudinary = async file => {
     const data = new FormData();
     data.append("file", file);
@@ -52,7 +51,6 @@ const ProjectForm = () => {
     try { new URL(str); return true; } catch { return false; }
   };
 
-  /* ---------- handlers ---------- */
   const handleImageChange = e => {
     if (e.target.files?.[0]) {
       setImageFile(e.target.files[0]);
@@ -63,6 +61,18 @@ const ProjectForm = () => {
   const toggleTag = t =>
     setTags(prev =>
       prev.includes(t) ? prev.filter(x => x !== t) : [...prev, t]);
+
+  const logActivity = async (type, projectId, details = {}) => {
+    if (!user) return;
+    await addDoc(collection(db, "logs"), {
+      userId: user.uid,
+      userEmail: user.email,
+      type,
+      projectId,
+      timestamp: new Date().toISOString(),
+      ...details,
+    });
+  };
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -81,13 +91,13 @@ const ProjectForm = () => {
       setLoading(true);
       const imageUrl = imageFile ? await uploadToCloudinary(imageFile) : "";
 
-      await addDoc(collection(db, "projects"), {
+      const docRef = await addDoc(collection(db, "projects"), {
         title,
         description,
-        tags,            // ARRAY
-        type,            // STRING
-        technology,      // STRING
-        theme,           // STRING
+        tags,
+        type,
+        technology,
+        theme,
         imageUrl,
         visibility,
         githubLink: githubLink.trim() || null,
@@ -97,6 +107,7 @@ const ProjectForm = () => {
         createdAt: serverTimestamp(),
       });
 
+      await logActivity("crear", docRef.id, { title });
       navigate("/profile");
     } catch (err) {
       console.error(err);
@@ -106,12 +117,10 @@ const ProjectForm = () => {
     }
   };
 
-  /* ---------- JSX ---------- */
   return (
     <form onSubmit={handleSubmit} className="project-form">
       {error && <p className="error-text">{error}</p>}
 
-      {/* título */}
       <div className="form-group">
         <label htmlFor="title">Título*</label>
         <input
@@ -122,14 +131,13 @@ const ProjectForm = () => {
           required
         />
       </div>
-      {/* descripción */}
+
       <div className="form-group">
         <label htmlFor="description">Descripción breve*</label>
         <textarea id="description" rows="4" value={description}
           onChange={e => setDescription(e.target.value)} required />
       </div>
 
-      {/* etiquetas múltiples */}
       <div className="form-group">
         <label>Etiquetas*</label>
         <div className="tags-wrapper">
@@ -143,7 +151,6 @@ const ProjectForm = () => {
         </div>
       </div>
 
-      {/* type / technology / theme / visibility */}
       <div className="form-row4">
         <div className="form-group">
           <label>Tipo</label>
@@ -175,16 +182,9 @@ const ProjectForm = () => {
         </div>
       </div>
 
-
-      {/* imagen */}
       <div className="form-group">
         <label>Imagen destacada</label>
-
-        {/* contenedor clic-able */}
-        <div
-          className="image-uploader"
-          onClick={() => document.getElementById("image-input").click()}
-        >
+        <div className="image-uploader" onClick={() => document.getElementById("image-input").click()}>
           {imagePreview ? (
             <>
               <img src={imagePreview} alt="preview" className="image-preview" />
@@ -197,8 +197,6 @@ const ProjectForm = () => {
             </div>
           )}
         </div>
-
-        {/* input real (oculto) */}
         <input
           id="image-input"
           type="file"
@@ -208,8 +206,6 @@ const ProjectForm = () => {
         />
       </div>
 
-
-      {/* links opcionales */}
       <div className="form-group">
         <label htmlFor="github">Link de GitHub</label>
         <input
@@ -232,7 +228,6 @@ const ProjectForm = () => {
         />
       </div>
 
-      {/* acciones */}
       <div className="form-actions">
         <button className="btn btn-primary" disabled={loading}>
           {loading ? "Guardando…" : "Guardar Proyecto"}

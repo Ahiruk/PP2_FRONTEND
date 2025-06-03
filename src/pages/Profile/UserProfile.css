@@ -293,3 +293,25 @@
         text-align: center;
     }
 }
+
+.activity-timeline {
+    margin-top: 20px;
+    padding-left: 0;
+}
+
+.timeline-entry {
+    list-style: none;
+    margin-bottom: 10px;
+    border-left: 3px solid #ddd;
+    padding-left: 10px;
+}
+
+.timeline-entry .timestamp {
+    font-size: 0.85em;
+    color: #666;
+    display: block;
+}
+
+.timeline-entry .action {
+    font-size: 1em;
+}
