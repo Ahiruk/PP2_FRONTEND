@@ -12,6 +12,7 @@ import Profile from "../src/pages/Profile/Profile";
 import NewProject from "../src/pages/Profile/NewProject";
 import UserProfile from "../src/pages/Profile/UserProfile";
 import ProyectoDetalle from "../src/pages/ProjectView/ProyectoDetalle";
+import EditarPerfil from "../src/pages/Profile/EditarPerfil";
 
 // Componentes
 import PrivateRoute from "../src/components/PrivateRoute";
@@ -55,6 +56,14 @@ function App() {
           element={
             <PrivateRoute>
               <NewProject />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile/edit"
+          element={
+            <PrivateRoute>
+              <EditarPerfil />
             </PrivateRoute>
           }
         />
