@@ -91,3 +91,31 @@ body.dark .fab-link:hover{
 body.dark .fab-main{
   background:var(--primary-color);
 }
+/* —— Tooltip del menú flotante ——————————————— */
+.fab-link{
+  position:relative;   /* contenedor para el tooltip */
+}
+.fab-tooltip{
+  position:absolute;
+  right:110%;                /* pega a la izquierda del icono */
+  top:50%;
+  transform:translateY(-50%);
+  opacity:0;
+  background:rgba(0,0,0,.8);
+  color:#fff;
+  padding:4px 8px;
+  border-radius:4px;
+  font-size:.75rem;
+  white-space:nowrap;
+  pointer-events:none;
+  transition:opacity .2s, transform .2s;
+}
+.fab-link:hover .fab-tooltip{
+  opacity:1;
+  transform:translate(-6px,-50%);  /* pequeño desplazamiento al aparecer */
+}
+
+/* modo oscuro (opcional) */
+body.dark .fab-tooltip{
+  background:#1f2937;
+}
