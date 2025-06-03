@@ -229,7 +229,7 @@ const TodosLosProyectos = () => {
                 {p.imageUrl && <img src={p.imageUrl} alt={p.title} className="card-img" />}
                 <h3>{p.title}</h3>
                 <p className="autor">
-                  Autor: <Link to={`/perfil/${p.uid}`}>{autorNombre}</Link>
+                  Autor: <Link to={`/profile/${p.uid}`}>{autorNombre}</Link>
                   {sigoAutor && <span className="siguiendo-label"> — Sigues a este usuario</span>}
                 </p>
 
@@ -256,7 +256,7 @@ const TodosLosProyectos = () => {
                     <ul>
                       {(p.comments || []).map((c, i) => (
                         <li key={i}>
-                          <b><Link to={`/perfil/${c.userId}`}>{c.userEmail}</Link></b>: {c.text}
+                          <b><Link to={`/profile/${c.userId}`}>{c.userEmail}</Link></b>: {c.text}
                         </li>
                       ))}
                     </ul>

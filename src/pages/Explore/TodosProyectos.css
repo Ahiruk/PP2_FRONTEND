@@ -353,11 +353,27 @@
   background-color: #f0f6ff;
 }
 
+body.dark .seguido-card {
+  background-color: #2a2a3b;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 8px rgba(0, 153, 255, 0.2);
+}
+
+body.dark .seguido-card:hover {
+  background-color: #323249;
+  box-shadow: 0 0 12px rgba(0, 153, 255, 0.3);
+}
+
 .siguiendo-label {
   color: #2d6cdf;
   font-weight: 600;
   font-size: 0.85rem;
 }
+
+body.dark .siguiendo-label {
+  color: var(--secondary-color);
+}
+
 
 /* Ajustes para logros y ranking responsivos y compatibles con ambos temas */
 .ranking-grid {
