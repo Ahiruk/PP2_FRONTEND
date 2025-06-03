@@ -162,7 +162,7 @@ const Comunidades = () => {
                 value={nuevoMensaje}
                 onChange={(e) => setNuevoMensaje(e.target.value)}
               />
-              <button onClick={enviarMensaje}>Publicar</button>
+              <button onClick={enviarMensaje} className="publicar-btn">Publicar</button>
             </>
           ) : (
             <p className="aviso-login">Inicia sesión para comentar en esta comunidad.</p>

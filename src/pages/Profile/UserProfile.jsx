@@ -172,14 +172,14 @@ export default function UserProfile() {
         <ul>
           <li onClick={() => setActiveTab("perfil")} className={activeTab === "perfil" ? "active" : ""}>Mi perfil</li>
           <li onClick={() => setActiveTab("proyectos")} className={activeTab === "proyectos" ? "active" : ""}>Mis proyectos</li>
-          <li onClick={() => setActiveTab("favoritos")}  className={activeTab === "favoritos" ? "active" : ""}>Favoritos</li>
+          <li onClick={() => setActiveTab("favoritos")} className={activeTab === "favoritos" ? "active" : ""}>Favoritos</li>
           <li onClick={() => setActiveTab("actividad")} className={activeTab === "actividad" ? "active" : ""}>Actividad</li>
 
         </ul>
       </div>
 
       <div className="dashboard-content">
-      {activeTab === "favoritos" && (
+        {activeTab === "favoritos" && (
           <>
             <h2 className="dashboard-title">Proyectos Favoritos</h2>
             <div className="projects-list">
@@ -203,17 +203,47 @@ export default function UserProfile() {
             <h2 className="dashboard-title">Mi perfil</h2>
             <div className="profile-card">
               <div className="profile-img-container">
-                <img src={previewPhoto} alt="Foto de perfil" className="profile-img editable" />
-                {editing && (
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                      setEditedPhoto(e.target.files[0]);
-                      setPreviewPhoto(URL.createObjectURL(e.target.files[0]));
-                    }}
-                  />
-                )}
+
+
+
+
+                <div className="profile-img-wrapper">
+                  <img src={previewPhoto} alt="Foto de perfil" className="profile-img editable" />
+
+                  {editing && (
+                    <div
+                      className="upload-drop-area"
+                      onClick={() => document.getElementById("photo-upload").click()}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        const file = e.dataTransfer.files[0];
+                        if (file) {
+                          setEditedPhoto(file);
+                          setPreviewPhoto(URL.createObjectURL(file));
+                        }
+                      }}
+                    >
+                      📁 <strong>Haz clic para cambiar tu foto de perfil</strong> 
+                      <input
+                        type="file"
+                        id="photo-upload"
+                        accept="image/*"
+                        style={{ display: "none" }}
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          if (file) {
+                            setEditedPhoto(file);
+                            setPreviewPhoto(URL.createObjectURL(file));
+                          }
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+
+
+
               </div>
               <div className="profile-info">
                 {editing ? (
@@ -305,29 +335,29 @@ export default function UserProfile() {
           </>
         )}
         {activeTab === "actividad" && (
-  <>
-    <h2 className="dashboard-title">Actividad reciente</h2>
-    <div className="activity-timeline">
-      {userLogs.length === 0 ? (
-        <p>No hay registros de actividad.</p>
-      ) : (
-        <ul>
-          {userLogs.map((log, index) => (
-            <li key={index} className="timeline-entry">
-              <span className="timestamp">
-                {new Date(log.timestamp).toLocaleString()}
-              </span>
-              <span className="action">
-                <strong>{log.type.toUpperCase()}</strong>
-                {log.title && ` - ${log.title}`}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  </>
-)}
+          <>
+            <h2 className="dashboard-title">Actividad reciente</h2>
+            <div className="activity-timeline">
+              {userLogs.length === 0 ? (
+                <p>No hay registros de actividad.</p>
+              ) : (
+                <ul>
+                  {userLogs.map((log, index) => (
+                    <li key={index} className="timeline-entry">
+                      <span className="timestamp">
+                        {new Date(log.timestamp).toLocaleString()}
+                      </span>
+                      <span className="action">
+                        <strong>{log.type.toUpperCase()}</strong>
+                        {log.title && ` - ${log.title}`}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </>
+        )}
 
       </div>
     </div>

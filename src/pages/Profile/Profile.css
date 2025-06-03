@@ -56,7 +56,7 @@
 
 /* 🌙 Modo Oscuro: texto de “+ Nuevo Proyecto” igual a botón de cerrar sesión */
 body.dark .btn-new {
-    color: #374151;
+    color: #ffffff;
     font-weight: bold;
     /* texto blanco desde un inicio */
 }
@@ -94,7 +94,7 @@ body.dark .project-actions .delete {
 
 /* Tarjetas */
 .project-card {
-    background: var(--accent-color);
+    background: #323249;
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;

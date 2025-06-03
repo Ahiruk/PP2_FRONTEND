@@ -26,12 +26,14 @@ body.dark .form-group label{
 
 /* 🌙 Modo Oscuro: solo cambia el color del texto de los botones */
 body.dark button {
-  color: var(--accent-color);    /* aquí usas tu variable definida en body.dark */
+  color: #ffffff;    /* aquí usas tu variable definida en body.dark */
+  background-color: #374151; /* Color de fondo oscuro */
 }
 
 /* Asegura que en hover también mantenga ese color */
 body.dark button:hover {
-  color: var(--text-color);
+  color: #2e2e42;
+  background-color: white;
 }
 
 
@@ -83,7 +85,7 @@ input[type="search"] {
   border: 1px solid #ccc;
   padding: 12px;
   border-radius: 8px;
-  width: 80%;
+  /* width: 80%; */
   margin-bottom: 1rem;
   font-size: 1rem;
   background-color: white;

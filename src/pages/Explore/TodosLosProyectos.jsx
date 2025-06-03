@@ -176,7 +176,7 @@ const TodosLosProyectos = () => {
               <button
                 className="btn-logout"
                 onClick={handleLogout}
-                style={{ marginTop: "0.5rem", backgroundColor: "#e63946", color: "#fff" }}>
+                style={{ marginTop: "0.5rem", backgroundColor: "white", color: "#374151" }}>
                 Cerrar sesión
               </button>
             </div>
