@@ -159,3 +159,77 @@
   66%  { background-position: -100% 66%,   0% 66%, 100% 66%; }
   100% { background-position:   0% 100%, 100% 100%, 200% 100%; }
 }
+
+
+
+
+/* ---------- HERO ---------- */
+.hero {
+  text-align: center;
+  padding: 4rem 1rem;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: #fff;
+}
+
+.hero h1 {
+  font-family: 'Cal Sans', sans-serif;
+  font-size: 2.5rem;
+  margin-bottom: .5rem;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* --- Botones del hero (NO afectan login) --- */
+.hero .cta-primary,
+.hero .cta-secondary {
+  padding: .7rem 1.4rem;
+  border-radius: .5rem;
+  border: none;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+}
+
+.hero .cta-primary {
+  background: #fff;
+  color: var(--primary-color);
+}
+
+.hero .cta-secondary {
+  background: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+}
+
+.hero .cta-primary:hover,
+.hero .cta-secondary:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 8px rgba(0,0,0,.15);
+}
+
+/* Enlace “Iniciar sesión” del hero */
+.hero .login-link {
+  margin-top: 1rem;
+  background: none;
+  border: none;
+  color: #fff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ---------- LISTA DE PROYECTOS ---------- */
+.todos-title {
+  text-align: center;
+  margin: 2rem 0 1rem;
+  font-size: 1.8rem;
+  color: var(--primary-color);
+}

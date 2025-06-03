@@ -28,6 +28,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/todoslosproyectos" element={<TodosLosProyectos />} />
+        <Route path="/explore" element={<TodosLosProyectos />} />
         <Route path="/proyecto/:id" element={<MasInformacion />} />
 
         {/* 🔒 Rutas Privadas */}
