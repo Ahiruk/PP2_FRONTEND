@@ -13,7 +13,7 @@ import "./ProjectForm.css";
 const TAG_OPTIONS = ["JavaScript", "Python", "React", "Node.js", "CSS", "TypeScript", "Firebase", "SQL", "C++", "Java", "PHP", "Ruby", "Django", "Flask", "Express.js", "Next.js", "Angular", "Vue.js", "HTML"];
 const TYPE_OPTIONS = ["Web", "Móvil", "Web/Móvil", "Otro"];
 const TECH_OPTIONS = ["React", "No sabe"];
-const THEME_OPTIONS = ["Educación", "Salud", "Finanzas", "Material Uninorte"];
+const THEME_OPTIONS = ["Educación", "Salud", "Finanzas", "Material Uninsorte"];
 
 const ProjectForm = () => {
   const [title, setTitle] = useState("");
