@@ -150,13 +150,13 @@ const TodosLosProyectos = () => {
                   <button
                     title="Like"
                     onClick={() => toggleField(p, "likes")}
-                    style={{ color: liked ? "red" : {} }}>
+                    style={{ color: liked ? {} : {} }}>
                     ❤️ {p.likes?.length || 0}
                   </button>
                   <button
                     title="Favorito"
                     onClick={() => toggleField(p, "favorites")}
-                    style={{ color: fav ? "gold" : {} }}>
+                    style={{ color: fav ? {}: {} }}>
                     ⭐ {p.favorites?.length || 0}
                   </button>
                   <button
