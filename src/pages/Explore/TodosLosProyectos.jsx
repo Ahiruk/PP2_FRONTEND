@@ -178,19 +178,16 @@ const TodosLosProyectos = () => {
                   <button
                     title="Like"
                     onClick={() => toggleField(p, "likes")}
-                  >
+                    style={{ color: liked ? "red" : "gray" }}>
                     ❤️ {p.likes?.length || 0}
                   </button>
                   <button
                     title="Favorito"
                     onClick={() => toggleField(p, "favorites")}
-                  >
+                    style={{ color: fav ? "gold" : "gray" }}>
                     ⭐ {p.favorites?.length || 0}
                   </button>
-                  <button
-                    title="Comentarios"
-                    onClick={() => setOpenId(open ? null : p.id)}
-                  >
+                  <button title="Comentarios" onClick={() => setOpenId(open ? null : p.id)}>
                     💬 {p.comments?.length || 0}
                   </button>
                 </div>
