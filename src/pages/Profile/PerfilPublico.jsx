@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {
   db,
   auth
@@ -21,6 +21,8 @@ const PerfilPublico = () => {
   const currentUser = auth.currentUser;
   const [seguido, setSeguido] = useState(false);
   const [proyectos, setProyectos] = useState([]);
+  const [seguidosData, setSeguidosData] = useState([]);
+  const [seguidoresData, setSeguidoresData] = useState([]);
 
   useEffect(() => {
     const fetchPerfil = async () => {
@@ -32,6 +34,22 @@ const PerfilPublico = () => {
           const data = docSnap.data();
           setPerfil(data);
           setSeguido(data.seguidores?.includes(currentUser?.uid));
+
+          // Traer datos de seguidos y seguidores
+          const fetchUsuarios = async (uids = []) => {
+            const usuarios = await Promise.all(
+              uids.map(async id => {
+                const u = await getDoc(doc(db, "usuarios", id));
+                return u.exists() ? { id, ...u.data() } : { id, name: "Usuario desconocido" };
+              })
+            );
+            return usuarios;
+          };
+
+          const seguidos = await fetchUsuarios(data.siguiendo || []);
+          const seguidores = await fetchUsuarios(data.seguidores || []);
+          setSeguidosData(seguidos);
+          setSeguidoresData(seguidores);
         }
       } catch (error) {
         console.error("Error al cargar perfil:", error);
@@ -96,7 +114,43 @@ const PerfilPublico = () => {
         </div>
       </div>
 
-      {[
+      {/* Lista de seguidos y seguidores */}
+      <div className="perfil-publico-section">
+        <h3>👥 Seguidores y Seguidos</h3>
+        <div className="seguidores-listas">
+          <div>
+            <strong>Siguiendo:</strong>
+            {seguidosData.length > 0 ? (
+              <ul className="perfil-publico-list">
+                {seguidosData.map((u) => (
+                  <li key={u.id}>
+                    <Link to={`/profile/${u.id}`}>{u.name || u.nombre || "Usuario"}</Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No sigue a nadie aún.</p>
+            )}
+          </div>
+
+          <div>
+            <strong>Seguidores:</strong>
+            {seguidoresData.length > 0 ? (
+              <ul className="perfil-publico-list">
+                {seguidoresData.map((u) => (
+                  <li key={u.id}>
+                    <Link to={`/profile/${u.id}`}>{u.name || u.nombre || "Usuario"}</Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>Aún no tiene seguidores.</p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {[ 
         { label: "🎓 Educación", data: perfil.educacion },
         { label: "💼 Experiencia", data: perfil.experiencia },
         { label: "🧠 Habilidades", data: perfil.habilidades },
