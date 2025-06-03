@@ -1,0 +1,49 @@
+/* ProyectoDetalle.css */
+
+/* Variables Light mode */
+:root {
+  --background-color: #fff;
+  --primary-color: #269af2;
+  --secondary-color: #1a73e8;
+  --accent-color: #f0f4f8;
+  --text-color: #222;
+  --card-shadow-color: rgba(0, 0, 0, 0.1);
+  --button-color: gray;
+}
+
+/* Contenedor general */
+.project-list-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+/* Cada proyecto */
+.project-card {
+  background-color: var(--accent-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px var(--card-shadow-color);
+  padding: 20px;
+  margin-bottom: 30px;
+  max-width: 100%;
+  box-sizing: border-box;
+  color: var(--text-color);
+}
+
+/* Imágenes */
+.project-card img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 10px 0;
+}
+
+/* Texto centrado del título */
+.project-list-container h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: var(--primary-color);
+}
