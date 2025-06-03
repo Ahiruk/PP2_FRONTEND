@@ -1,0 +1,16 @@
+.perfil-container {
+  max-width: 700px;
+  margin: auto;
+  padding: 1rem;
+}
+
+.perfil-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.perfil-container input,
+.perfil-container textarea {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+}

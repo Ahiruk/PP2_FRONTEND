@@ -1,0 +1,55 @@
+.perfil-publico-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.perfil-publico-container h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.perfil-publico-container p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+.perfil-publico-section {
+  margin-top: 1.5rem;
+}
+
+.perfil-publico-section h3 {
+  font-size: 1.2rem;
+  color: #222;
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 0.25rem;
+}
+
+.perfil-publico-list {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  color: #444;
+}
+
+.perfil-publico-list li {
+  margin-bottom: 0.5rem;
+}
+
+.perfil-publico-links a {
+  display: inline-block;
+  margin-right: 1rem;
+  color: #0077b5;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.perfil-publico-links a:hover {
+  text-decoration: underline;
+}

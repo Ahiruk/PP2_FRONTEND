@@ -13,6 +13,9 @@ import NewProject from "../src/pages/Profile/NewProject";
 import UserProfile from "../src/pages/Profile/UserProfile";
 import ProyectoDetalle from "../src/pages/ProjectView/ProyectoDetalle";
 import EditarPerfil from "../src/pages/Profile/EditarPerfil";
+import PerfilProfesional from "../src/pages/Profile/PerfilProfesional"; // 🆕
+import PerfilPublico from "../src/pages/Profile/PerfilPublico"; // 🆕
+
 
 // Componentes
 import PrivateRoute from "../src/components/PrivateRoute";
@@ -50,6 +53,17 @@ function App() {
     </PrivateRoute>
   }
 />
+<Route
+  path="/profile/cv"
+  element={
+    <PrivateRoute>
+      <PerfilProfesional />
+    </PrivateRoute>
+  }
+/>
+
+<Route path="/profile/:uid" element={<PerfilPublico />} />
+
 
         <Route
           path="/profile/new"
